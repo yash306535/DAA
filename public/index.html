@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MatMul Lab — Single vs Multithreaded Matrix Multiplication</title>
+  <meta name="description" content="DAA Mini Project: classic, thread-per-row, thread-per-cell and thread-pool matrix multiplication, benchmarked on the server and in your browser." />
+  <meta name="theme-color" content="#070b16" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23070b16'/%3E%3Cg fill='%2322d3ee'%3E%3Crect x='6' y='6' width='6' height='6' rx='1.5'/%3E%3Crect x='13' y='6' width='6' height='6' rx='1.5' fill='%23a78bfa'/%3E%3Crect x='20' y='6' width='6' height='6' rx='1.5'/%3E%3Crect x='6' y='13' width='6' height='6' rx='1.5' fill='%23a3e635'/%3E%3Crect x='13' y='13' width='6' height='6' rx='1.5'/%3E%3Crect x='20' y='13' width='6' height='6' rx='1.5' fill='%23a78bfa'/%3E%3Crect x='6' y='20' width='6' height='6' rx='1.5'/%3E%3Crect x='13' y='20' width='6' height='6' rx='1.5' fill='%23a3e635'/%3E%3Crect x='20' y='20' width='6' height='6' rx='1.5'/%3E%3C/g%3E%3C/svg%3E" />
+  <!-- crossorigin is required because the page is cross-origin isolated (COEP) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" crossorigin href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script>
+    // Apply the saved theme before first paint (avoids a flash of the wrong theme).
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- ============================== NAV ============================== -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="MatMul Lab home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>MatMul<span class="accent">Lab</span></span>
+      </a>
+      <nav aria-label="Sections">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#system">System</a></li>
+          <li><a href="#playground">Playground</a></li>
+          <li><a href="#dashboard">Benchmark</a></li>
+          <li><a href="#analysis">Analysis</a></li>
+          <li><a href="#theory">Theory</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to light theme" title="Toggle theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>
+        </button>
+        <button class="icon-btn menu-btn" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============================== HERO ============================== -->
+    <section class="hero" id="top">
+      <canvas id="matrixRain" aria-hidden="true"></canvas>
+      <div class="hero-content">
+        <p class="eyebrow">DAA Mini Project 7 · SPPU · BE Computer Engineering</p>
+        <h1>Matrix Multiplication<br /><span class="gradient-text">Single vs Multithreaded</span></h1>
+        <p class="tagline">Multiply two n×n matrices with one thread, a thread per row, a thread per cell and a smart thread pool. We time each one, check the answers and show where the extra threads help and where they only slow things down.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#dashboard" id="heroStart">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg>
+            Start Benchmark
+          </a>
+          <a class="btn btn-ghost" href="#playground">Open playground</a>
+        </div>
+        <ul class="hero-tags" aria-label="Technologies">
+          <li>O(n³)</li><li>worker_threads</li><li>Web Workers</li><li>SharedArrayBuffer</li><li>Float64Array</li>
+        </ul>
+      </div>
+      <a class="scroll-hint" href="#system" aria-label="Scroll to system info"><span></span></a>
+    </section>
+
+    <!-- ============================== SYSTEM ============================== -->
+    <section class="section" id="system">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">01 · Hardware</p>
+          <h2>System information</h2>
+          <p class="lead">Threads can only run truly in parallel on separate CPU cores, so the number of cores sets the best speedup you can get.</p>
+        </header>
+        <div class="grid-2">
+          <article class="card glass reveal" aria-labelledby="srvTitle">
+            <div class="card-head">
+              <span class="pill pill-cyan">Server</span>
+              <h3 id="srvTitle">Node.js host</h3>
+            </div>
+            <div class="big-stat">
+              <span class="counter mono" id="srvCores" data-target="0">–</span>
+              <span class="big-stat-label">CPU cores<br /><small>os.availableParallelism()</small></span>
+            </div>
+            <dl class="kv">
+              <div><dt>Node version</dt><dd class="mono" id="srvNode">–</dd></div>
+              <div><dt>Platform</dt><dd class="mono" id="srvPlatform">–</dd></div>
+              <div><dt>CPU</dt><dd class="mono" id="srvCpu">–</dd></div>
+              <div><dt>Memory</dt><dd class="mono" id="srvMem">–</dd></div>
+              <div><dt>Max live threads</dt><dd class="mono" id="srvLive">–</dd></div>
+            </dl>
+            <p class="status-line" id="srvStatus" role="status">Connecting to server…</p>
+          </article>
+
+          <article class="card glass reveal" aria-labelledby="devTitle">
+            <div class="card-head">
+              <span class="pill pill-lime">My device</span>
+              <h3 id="devTitle">This browser</h3>
+            </div>
+            <div class="big-stat">
+              <span class="counter mono" id="devCores" data-target="0">–</span>
+              <span class="big-stat-label">logical cores<br /><small>navigator.hardwareConcurrency</small></span>
+            </div>
+            <dl class="kv">
+              <div><dt>Browser</dt><dd class="mono" id="devBrowser">–</dd></div>
+              <div><dt>Platform</dt><dd class="mono" id="devPlatform">–</dd></div>
+              <div><dt>SharedArrayBuffer</dt><dd class="mono" id="devShared">–</dd></div>
+              <div><dt>Max live threads</dt><dd class="mono" id="devLive">–</dd></div>
+            </dl>
+            <p class="status-line">Pick <b>My device</b> in the playground or dashboard to run the same benchmark here with Web Workers.</p>
+          </article>
+        </div>
+
+        <aside class="callout glass reveal" aria-labelledby="whyDiff">
+          <h3 id="whyDiff">Why are server and browser results different?</h3>
+          <div class="grid-3 compact">
+            <p><b class="c-cyan">Few server cores.</b> Free cloud plans (like Render's free tier) give you a small share of <em>one</em> CPU. With one core the threads just take turns, so they can't run in parallel and every thread you create adds overhead. Speedup is close to 1× or below.</p>
+            <p><b class="c-violet">Your laptop has more.</b> A typical laptop has 4–16 logical cores. The thread pool can keep all of them busy, so "My device" usually shows a real speedup for large matrices.</p>
+            <p><b class="c-lime">Thread start-up costs differ.</b> A Node worker thread starts a whole new V8 engine (tens of ms). A browser Web Worker is often a bit cheaper. Either way, small matrices finish faster than a thread can even start.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============================== PLAYGROUND ============================== -->
+    <section class="section" id="playground">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">02 · Try it</p>
+          <h2>Interactive playground</h2>
+          <p class="lead">Choose a size and a method, then run it. For n ≤ 8 you can watch the threads split up the work.</p>
+        </header>
+
+        <div class="play-grid">
+          <form class="card glass controls reveal" id="playForm" novalidate>
+            <div class="field">
+              <label for="playMethod">Method</label>
+              <select id="playMethod">
+                <option value="single">Single-threaded (triple loop)</option>
+                <option value="row">Thread per row</option>
+                <option value="cell">Thread per cell</option>
+                <option value="pool" selected>Thread pool (chunks = cores)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <div class="field-row">
+                <label for="playSize">Matrix size <span class="mono">n</span></label>
+                <output class="mono size-out" id="playSizeOut" for="playSize">6 × 6</output>
+              </div>
+              <input type="range" id="playSize" min="2" max="512" value="6" step="1" aria-describedby="playWarn" />
+              <div class="range-scale mono" aria-hidden="true"><span>2</span><span id="playMaxLabel">512</span></div>
+            </div>
+
+            <fieldset class="field">
+              <legend>Run on</legend>
+              <div class="segmented" role="radiogroup">
+                <input type="radio" name="playTarget" id="ptServer" value="server" checked />
+                <label for="ptServer">Server</label>
+                <input type="radio" name="playTarget" id="ptDevice" value="device" />
+                <label for="ptDevice">My device</label>
+              </div>
+            </fieldset>
+
+            <div class="field">
+              <label for="playRuns">Repetitions</label>
+              <select id="playRuns">
+                <option value="1">1 run</option>
+                <option value="3" selected>3 runs (avg / min / max)</option>
+                <option value="5">5 runs</option>
+              </select>
+            </div>
+
+            <p class="warn" id="playWarn" role="note"></p>
+
+            <button class="btn btn-primary btn-block" type="submit" id="playRun">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg>
+              <span>Multiply</span>
+            </button>
+          </form>
+
+          <div class="card glass result reveal" id="playResult" aria-live="polite">
+            <div class="result-head">
+              <h3>Result</h3>
+              <span class="badge badge-idle" id="playBadge">Not run yet</span>
+            </div>
+            <div class="stats">
+              <div class="stat"><span class="stat-label">Average</span><span class="stat-value mono"><b id="rAvg">–</b><small> ms</small></span></div>
+              <div class="stat"><span class="stat-label">Min / Max</span><span class="stat-value mono"><b id="rMinMax">–</b><small> ms</small></span></div>
+              <div class="stat"><span class="stat-label">Threads</span><span class="stat-value mono"><b id="rThreads">–</b></span></div>
+              <div class="stat"><span class="stat-label">Ran on</span><span class="stat-value"><b id="rWhere">–</b></span></div>
+            </div>
+            <div class="split" aria-label="Time split">
+              <div class="split-head"><span>Where the time went</span><span class="mono" id="rSplitText"></span></div>
+              <div class="split-bar"><span class="split-create" id="rCreateBar"></span><span class="split-compute" id="rComputeBar"></span></div>
+              <div class="split-legend"><span><i class="sw sw-create"></i>Thread creation <b class="mono" id="rCreate">–</b> ms</span><span><i class="sw sw-compute"></i>Computation <b class="mono" id="rCompute">–</b> ms</span></div>
+            </div>
+            <div class="preview">
+              <div class="split-head"><span>Result preview — top-left 5×5 of C</span></div>
+              <div class="preview-grid mono" id="rPreview" aria-label="Preview of result matrix"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card glass viz-card reveal">
+          <div class="result-head">
+            <h3>Live visualization</h3>
+            <button class="btn btn-ghost btn-sm" type="button" id="vizReplay">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.7M4 4v4h4"/></svg>
+              Replay
+            </button>
+          </div>
+          <div id="viz" class="viz">
+            <p class="viz-empty">Set n ≤ 8 and press <b>Multiply</b> (or <b>Replay</b>) to see how the method splits work between threads.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== DASHBOARD ============================== -->
+    <section class="section" id="dashboard">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">03 · Measure</p>
+          <h2>Benchmark dashboard</h2>
+          <p class="lead">Run every method at several sizes with one click. A method is skipped at sizes above its limit (thread per cell: n ≤ 12, thread per row: n ≤ 300).</p>
+        </header>
+
+        <div class="card glass bench-controls reveal">
+          <fieldset class="field">
+            <legend>Run on</legend>
+            <div class="segmented" role="radiogroup">
+              <input type="radio" name="benchTarget" id="btServer" value="server" checked />
+              <label for="btServer">Server</label>
+              <input type="radio" name="benchTarget" id="btDevice" value="device" />
+              <label for="btDevice">My device</label>
+            </div>
+          </fieldset>
+          <fieldset class="field">
+            <legend>Sizes (n)</legend>
+            <div class="chip-checks" id="benchSizes">
+              <label><input type="checkbox" value="10" checked /><span>10</span></label>
+              <label><input type="checkbox" value="50" checked /><span>50</span></label>
+              <label><input type="checkbox" value="100" checked /><span>100</span></label>
+              <label><input type="checkbox" value="200" checked /><span>200</span></label>
+              <label><input type="checkbox" value="300" checked /><span>300</span></label>
+              <label><input type="checkbox" value="500" checked /><span>500</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="field">
+            <legend>Methods</legend>
+            <div class="chip-checks" id="benchMethods">
+              <label><input type="checkbox" value="single" checked disabled /><span><i class="sw" style="--c:var(--s-single)"></i>Single</span></label>
+              <label><input type="checkbox" value="row" checked /><span><i class="sw" style="--c:var(--s-row)"></i>Per row</span></label>
+              <label><input type="checkbox" value="cell" checked /><span><i class="sw" style="--c:var(--s-cell)"></i>Per cell</span></label>
+              <label><input type="checkbox" value="pool" checked /><span><i class="sw" style="--c:var(--s-pool)"></i>Pool</span></label>
+            </div>
+          </fieldset>
+          <div class="field">
+            <label for="benchRuns">Repetitions</label>
+            <select id="benchRuns">
+              <option value="1">1</option>
+              <option value="3" selected>3</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="bench-actions">
+            <button class="btn btn-primary" type="button" id="benchRun">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg>
+              <span>Run all benchmarks</span>
+            </button>
+            <button class="btn btn-ghost" type="button" id="exportCsv" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14"/></svg>
+              Export CSV
+            </button>
+            <button class="btn btn-ghost" type="button" id="printReport" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M7 14h10v6H7z"/></svg>
+              Download report
+            </button>
+          </div>
+          <div class="progress" id="benchProgress" hidden>
+            <div class="progress-head"><span id="benchStep">Starting…</span><span class="mono" id="benchPct">0%</span></div>
+            <div class="progress-track" role="progressbar" aria-labelledby="benchStep" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="benchBar"><span></span></div>
+          </div>
+          <p class="error" id="benchError" role="alert" hidden></p>
+        </div>
+
+        <div class="charts-grid">
+          <article class="card glass reveal">
+            <div class="result-head">
+              <div>
+                <h3>Execution time vs matrix size</h3>
+                <p class="muted small">Average total time (thread creation + computation). Lower is better.</p>
+              </div>
+              <div class="segmented segmented-sm" role="radiogroup" aria-label="Y axis scale">
+                <input type="radio" name="yscale" id="ysLog" value="log" checked /><label for="ysLog">Log</label>
+                <input type="radio" name="yscale" id="ysLin" value="linear" /><label for="ysLin">Linear</label>
+              </div>
+            </div>
+            <div class="legend" id="lineLegend"></div>
+            <div class="chart-box" id="lineChart"><div class="skeleton-chart" aria-hidden="true"></div><p class="chart-empty">Run the benchmark to draw this chart.</p></div>
+          </article>
+          <article class="card glass reveal">
+            <div class="result-head">
+              <div>
+                <h3>Speedup vs single-threaded</h3>
+                <p class="muted small">single time ÷ method time. Above 1× = faster, below 1× = slower (log scale).</p>
+              </div>
+            </div>
+            <div class="legend" id="barLegend"></div>
+            <div class="chart-box" id="barChart"><div class="skeleton-chart" aria-hidden="true"></div><p class="chart-empty">Run the benchmark to draw this chart.</p></div>
+          </article>
+        </div>
+
+        <article class="card glass table-card reveal">
+          <div class="result-head">
+            <div>
+              <h3>Results table</h3>
+              <p class="muted small">Click a column header to sort. <span class="fastest-key">Highlighted</span> = fastest method for that size.</p>
+            </div>
+            <span class="badge badge-idle" id="tableMeta">No data</span>
+          </div>
+          <div class="table-wrap" tabindex="0" aria-label="Benchmark results table">
+            <table class="results" id="resultsTable">
+              <thead>
+                <tr>
+                  <th scope="col" aria-sort="ascending"><button type="button" data-key="size">Size</button></th>
+                  <th scope="col"><button type="button" data-key="label">Method</button></th>
+                  <th scope="col" class="num"><button type="button" data-key="threads">Threads</button></th>
+                  <th scope="col" class="num"><button type="button" data-key="avgMs">Avg ms</button></th>
+                  <th scope="col" class="num"><button type="button" data-key="minMs">Min</button></th>
+                  <th scope="col" class="num"><button type="button" data-key="maxMs">Max</button></th>
+                  <th scope="col" class="num"><button type="button" data-key="creationMs">Creation</button></th>
+                  <th scope="col" class="num"><button type="button" data-key="computeMs">Compute</button></th>
+                  <th scope="col" class="num"><button type="button" data-key="speedup">Speedup</button></th>
+                  <th scope="col"><button type="button" data-key="correct">Correct</button></th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody">
+                <tr class="empty-row"><td colspan="10">No results yet — press <b>Run all benchmarks</b>.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================== ANALYSIS ============================== -->
+    <section class="section" id="analysis">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">04 · Understand</p>
+          <h2>Analysis</h2>
+          <p class="lead">These insights are written from the numbers you just measured, so they change with every benchmark run.</p>
+        </header>
+
+        <article class="card glass reveal" aria-labelledby="insTitle">
+          <h3 id="insTitle">Insights from your results</h3>
+          <ul class="insights" id="insights">
+            <li class="insight-empty">Run the benchmark in the dashboard above to get insights.</li>
+          </ul>
+        </article>
+
+        <div class="grid-2">
+          <article class="card glass reveal" aria-labelledby="cxTitle">
+            <h3 id="cxTitle">Complexity</h3>
+            <div class="table-wrap">
+              <table class="simple">
+                <thead><tr><th scope="col">Method</th><th scope="col">Total work</th><th scope="col">Threads T</th><th scope="col">Ideal time (p cores)</th><th scope="col">Extra space</th></tr></thead>
+                <tbody>
+                  <tr><td>Single</td><td class="mono">O(n³)</td><td class="mono">1</td><td class="mono">O(n³)</td><td class="mono">O(1)</td></tr>
+                  <tr><td>Per row</td><td class="mono">O(n³)</td><td class="mono">n</td><td class="mono">O(n³/p) + n·t<sub>c</sub></td><td class="mono">O(n)·stack</td></tr>
+                  <tr><td>Per cell</td><td class="mono">O(n³)</td><td class="mono">n²</td><td class="mono">O(n³/p) + n²·t<sub>c</sub></td><td class="mono">O(n²)·stack</td></tr>
+                  <tr><td>Pool</td><td class="mono">O(n³)</td><td class="mono">p</td><td class="mono">O(n³/p) + p·t<sub>c</sub></td><td class="mono">O(p)·stack</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="muted small">All methods do exactly n³ multiply-adds. Threads don't reduce the total work. They only spread it across cores. t<sub>c</sub> is the cost of creating one thread. Every method also stores the three n×n matrices A, B, C (O(n²) space), shared by all threads through a SharedArrayBuffer instead of being copied.</p>
+          </article>
+
+          <article class="card glass reveal" aria-labelledby="amTitle">
+            <h3 id="amTitle">Amdahl's Law, in simple words</h3>
+            <div class="formula mono" aria-label="Speedup equals one divided by the quantity one minus f plus f over p">S(p) = 1 / ((1 − f) + f / p)</div>
+            <p>Some fraction <b>f</b> of a program can run in parallel, and the rest <b>(1 − f)</b> has to run one step at a time. Even with unlimited cores, the one-at-a-time part still takes the same time. So the best possible speedup is <b>1 / (1 − f)</b>.</p>
+            <p>Matrix multiplication is almost entirely parallel (f ≈ 1), because every cell of C can be computed on its own. In practice, starting and stopping threads behaves like extra serial work. With small n that overhead takes up most of the time, so f is small and the threads don't help.</p>
+            <svg class="amdahl" viewBox="0 0 320 150" role="img" aria-label="Amdahl curves: speedup flattens as cores increase, lower for smaller parallel fraction">
+              <line x1="34" y1="128" x2="310" y2="128" class="ax" /><line x1="34" y1="8" x2="34" y2="128" class="ax" />
+              <path class="am1" d="M34 128 L68 115 L102 101 L136 88 L170 76 L204 63 L238 51 L272 39 L306 27" />
+              <path class="am2" d="M34 128 L68 117 L102 107 L136 99 L170 93 L204 87 L238 82 L272 77 L306 73" />
+              <path class="am3" d="M34 128 L68 123 L102 121 L136 120 L170 119 L204 118 L238 118 L272 117 L306 117" />
+              <text x="214" y="42" class="am-t">f = 0.99</text><text x="214" y="76" class="am-t">f = 0.9</text><text x="214" y="110" class="am-t">f = 0.5</text>
+              <text x="172" y="146" class="am-t" text-anchor="middle">cores p (1 → 9) →</text><text x="12" y="70" class="am-t" transform="rotate(-90 12 70)" text-anchor="middle">speedup</text>
+            </svg>
+          </article>
+        </div>
+
+        <article class="card glass reveal" aria-labelledby="tvaTitle">
+          <h3 id="tvaTitle">Theoretical vs actual speedup</h3>
+          <p class="muted small">Theoretical = min(threads, cores). That is the speedup you would get if creating threads cost nothing. Actual = what we measured. "Compute-only" leaves out thread creation.</p>
+          <div class="table-wrap">
+            <table class="simple" id="tvaTable">
+              <thead><tr><th scope="col">Size</th><th scope="col">Method</th><th scope="col" class="num">Theoretical</th><th scope="col" class="num">Actual (total)</th><th scope="col" class="num">Compute-only</th><th scope="col" class="num">Efficiency</th></tr></thead>
+              <tbody id="tvaBody"><tr class="empty-row"><td colspan="6">Waiting for benchmark results…</td></tr></tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================== THEORY ============================== -->
+    <section class="section" id="theory">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">05 · Learn</p>
+          <h2>Theory</h2>
+          <p class="lead">Everything you need to explain this project in your viva.</p>
+        </header>
+
+        <div class="grid-2">
+          <article class="card glass reveal">
+            <h3>Matrix multiplication</h3>
+            <p>For A (n×n) and B (n×n), each cell of the product is the dot product of a <b class="c-cyan">row of A</b> and a <b class="c-violet">column of B</b>:</p>
+            <div class="formula mono">C[i][j] = Σ<sub>k=0..n−1</sub> A[i][k] · B[k][j]</div>
+            <svg class="diagram" viewBox="0 0 360 140" role="img" aria-label="Row i of A times column j of B gives cell i,j of C">
+              <g class="d-mat"><rect x="10" y="20" width="90" height="90" rx="6"/><rect x="135" y="20" width="90" height="90" rx="6"/><rect x="260" y="20" width="90" height="90" rx="6"/></g>
+              <rect x="10" y="50" width="90" height="22" rx="4" class="d-row"/>
+              <rect x="170" y="20" width="22" height="90" rx="4" class="d-col"/>
+              <rect x="295" y="50" width="22" height="22" rx="4" class="d-cell"/>
+              <text x="55" y="132" text-anchor="middle" class="d-t">A · row i</text>
+              <text x="180" y="132" text-anchor="middle" class="d-t">B · column j</text>
+              <text x="305" y="132" text-anchor="middle" class="d-t">C[i][j]</text>
+              <text x="117" y="70" text-anchor="middle" class="d-op">×</text><text x="242" y="70" text-anchor="middle" class="d-op">=</text>
+            </svg>
+            <p>There are n² cells and each one needs n multiply-adds, so the total is <b>n³</b> operations, or <b>O(n³)</b> time. The three nested loops <span class="mono">i → j → k</span> are the classic algorithm.</p>
+          </article>
+
+          <article class="card glass reveal">
+            <h3>Processes, threads &amp; workers</h3>
+            <p>A <b>thread</b> is an independent sequence of instructions inside a process. Threads in the same process can run on different CPU cores at the same moment. That is <b>parallelism</b>.</p>
+            <p>JavaScript runs on a single thread, so we use <span class="mono">worker_threads</span> in Node.js and <span class="mono">Web Workers</span> in the browser. Each worker is a real OS thread with its own JS engine.</p>
+            <p>Threads normally don't share variables, so we put the matrices in a <span class="mono">SharedArrayBuffer</span> and view it as a <span class="mono">Float64Array</span>. Every thread then reads A and B and writes its own part of C in the <b>same memory</b>, with no copying and no locks. No two threads ever write the same cell.</p>
+            <p class="muted small">Creating a thread is not free. The OS has to set up a stack and the runtime starts a new engine. That cost, t<sub>c</sub>, is the main reason naïve threading loses.</p>
+          </article>
+
+          <article class="card glass reveal">
+            <h3>Thread per row</h3>
+            <svg class="diagram" viewBox="0 0 360 150" role="img" aria-label="Each row of C is computed by its own thread, shown in a different colour">
+              <g class="d-rows">
+                <rect x="20" y="15" width="150" height="22" rx="4" style="fill:hsl(190 85% 60% / .55)"/>
+                <rect x="20" y="41" width="150" height="22" rx="4" style="fill:hsl(250 85% 65% / .55)"/>
+                <rect x="20" y="67" width="150" height="22" rx="4" style="fill:hsl(310 85% 65% / .55)"/>
+                <rect x="20" y="93" width="150" height="22" rx="4" style="fill:hsl(80 75% 55% / .55)"/>
+              </g>
+              <g class="d-threads">
+                <path d="M172 26 H220"/><path d="M172 52 H220"/><path d="M172 78 H220"/><path d="M172 104 H220"/>
+                <rect x="224" y="16" width="110" height="20" rx="10"/><rect x="224" y="42" width="110" height="20" rx="10"/><rect x="224" y="68" width="110" height="20" rx="10"/><rect x="224" y="94" width="110" height="20" rx="10"/>
+                <text x="279" y="30" text-anchor="middle">thread 0</text><text x="279" y="56" text-anchor="middle">thread 1</text><text x="279" y="82" text-anchor="middle">thread 2</text><text x="279" y="108" text-anchor="middle">thread 3</text>
+              </g>
+              <text x="95" y="138" text-anchor="middle" class="d-t">C (n rows → n threads)</text>
+            </svg>
+            <p>n threads, each doing n² work. That is a reasonable amount of work per thread, but at n = 300 it means 300 threads fighting over a few cores, and 300 × t<sub>c</sub> of start-up time. That is why this method is capped at n ≤ 300.</p>
+          </article>
+
+          <article class="card glass reveal">
+            <h3>Thread per cell</h3>
+            <svg class="diagram" viewBox="0 0 360 150" role="img" aria-label="Every single cell of C gets its own thread">
+              <g id="cellDiagram"></g>
+              <text x="250" y="60" class="d-t">n² threads</text>
+              <text x="250" y="80" class="d-t">n work each</text>
+              <text x="250" y="100" class="d-t d-warn">overhead ≫ work</text>
+            </svg>
+            <p>n² threads, each doing only n multiply-adds. At n = 10 that is 100 threads, each doing just 10 multiplications, which is far less than the cost of creating the thread. It is the clearest example of too many threads making things slower.</p>
+          </article>
+
+          <article class="card glass reveal span-2">
+            <h3>Optimized thread pool (the smart approach)</h3>
+            <svg class="diagram wide" viewBox="0 0 720 120" role="img" aria-label="Rows are split into as many chunks as there are CPU cores; each core computes one chunk">
+              <g>
+                <rect x="20" y="16" width="160" height="86" rx="6" class="d-mat"/>
+                <rect x="20" y="16" width="160" height="21" rx="4" style="fill:hsl(190 85% 60% / .55)"/>
+                <rect x="20" y="38" width="160" height="21" rx="4" style="fill:hsl(250 85% 65% / .55)"/>
+                <rect x="20" y="60" width="160" height="21" rx="4" style="fill:hsl(310 85% 65% / .55)"/>
+                <rect x="20" y="82" width="160" height="20" rx="4" style="fill:hsl(80 75% 55% / .55)"/>
+              </g>
+              <g class="d-threads">
+                <path d="M184 26 H250"/><path d="M184 48 H330"/><path d="M184 70 H410"/><path d="M184 92 H490"/>
+                <rect x="254" y="16" width="70" height="20" rx="10"/><rect x="334" y="38" width="70" height="20" rx="10"/><rect x="414" y="60" width="70" height="20" rx="10"/><rect x="494" y="82" width="70" height="20" rx="10"/>
+                <text x="289" y="30" text-anchor="middle">core 0</text><text x="369" y="52" text-anchor="middle">core 1</text><text x="449" y="74" text-anchor="middle">core 2</text><text x="529" y="96" text-anchor="middle">core 3</text>
+              </g>
+              <text x="600" y="50" class="d-t">p threads</text><text x="600" y="70" class="d-t">n³/p work each</text>
+            </svg>
+            <p>Create only <b>p</b> threads, where p is the number of CPU cores, and give each one a block of about n/p rows. Every core is busy, the start-up cost is paid only p times, and each thread works on rows that sit next to each other in memory. Once n is big enough that n³/p of work outweighs p·t<sub>c</sub> of start-up, this beats single-threaded. Real systems (Java's ExecutorService, OpenMP, Node's libuv pool) work the same way, and also <em>reuse</em> their threads.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>MatMul<span class="accent">Lab</span></span></div>
+        <p class="muted small">Mini Project 7 — Matrix multiplication: single vs multithreaded.</p>
+      </div>
+      <dl class="footer-meta">
+        <div><dt>Student</dt><dd>Your Name (Roll No. XX)</dd></div>
+        <div><dt>College</dt><dd>Your College Name, Pune</dd></div>
+        <div><dt>Subject</dt><dd>Design &amp; Analysis of Algorithms (Lab) · BE Computer · SPPU</dd></div>
+        <div><dt>Source</dt><dd><a href="https://github.com/your-username/your-repo" rel="noopener">github.com/your-username/your-repo</a></dd></div>
+      </dl>
+    </div>
+  </footer>
+
+  <script src="js/matrixCore.js"></script>
+  <script src="js/browserBench.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Render reads this file automatically when you create a "Blueprint" from the repo.
+# You can also ignore it and create a plain "Web Service" with the same settings.
+services:
+  - type: web
+    name: matrix-multiplication-benchmark
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # How many worker threads may be alive at once on the server.
+      # Free instances have ~512 MB RAM, so keep this small.
+      - key: MAX_LIVE_WORKERS
+        value: "16"

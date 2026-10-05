@@ -1,0 +1,19 @@
+{
+  "name": "matrix-multiplication-benchmark",
+  "version": "1.0.0",
+  "description": "DAA Mini Project 7: single-threaded vs multithreaded matrix multiplication (thread per row, thread per cell, thread pool) with a live benchmark dashboard.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test/verify.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["matrix-multiplication", "worker-threads", "web-workers", "daa", "benchmark"],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
