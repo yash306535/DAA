@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly VITE_RPC_URL?: string;
   readonly VITE_EXPLORER_URL?: string;
   readonly VITE_DEPLOY_BLOCK?: string;
+  readonly VITE_DEMO_MODE?: string;
 }
 
 interface ImportMeta {

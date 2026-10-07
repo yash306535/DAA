@@ -27,6 +27,7 @@ function findRevertData(err: any, depth = 0): string | undefined {
   if (!err || depth > 6) return undefined;
   if (typeof err.data === "string" && err.data.startsWith("0x") && err.data.length >= 10) return err.data;
   if (typeof err.data?.data === "string" && err.data.data.startsWith("0x")) return err.data.data;
+  if (typeof err.data?.result === "string" && err.data.result.startsWith("0x")) return err.data.result; // Ganache
   return findRevertData(err.error, depth + 1) ?? findRevertData(err.info?.error, depth + 1) ?? findRevertData(err.cause, depth + 1);
 }
 

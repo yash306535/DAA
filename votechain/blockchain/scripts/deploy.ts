@@ -52,6 +52,8 @@ async function main() {
   const contractsDir = path.join(FRONTEND_DIR, "src/contracts");
   fs.mkdirSync(contractsDir, { recursive: true });
   fs.writeFileSync(path.join(contractsDir, "VotingABI.json"), JSON.stringify(artifact.abi, null, 2));
+  // bytecode is used by the in-browser demo chain (frontend demo mode)
+  fs.writeFileSync(path.join(contractsDir, "VotingBytecode.json"), JSON.stringify({ bytecode: artifact.bytecode }));
 
   // 3. frontend environment
   const rpc = network.name === "localhost" || network.name === "hardhat" ? "http://127.0.0.1:8545" : "";

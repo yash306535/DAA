@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import NetworkBackground from "./components/NetworkBackground";
 import NetworkNotice from "./components/NetworkNotice";
 import TxModal from "./components/TxModal";
+import DemoWalletPanel from "./components/DemoWalletPanel";
 import Home from "./pages/Home";
 import ConnectWallet from "./pages/ConnectWallet";
 import VotePage from "./pages/Vote";
@@ -38,6 +39,7 @@ export default function App() {
       </main>
       <Footer />
       <TxModal />
+      {import.meta.env.VITE_DEMO_MODE === "true" && <DemoWalletPanel />}
       <Toaster
         position="bottom-right"
         toastOptions={{

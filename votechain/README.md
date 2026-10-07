@@ -10,6 +10,9 @@ VoteChain is a blockchain-based e-voting dApp. A Solidity smart contract (`Votin
 
 ---
 
+## 🌐 Live demo
+**https://claude.ai/artifact/3bDWVm9D94JhM3gAghS69V**: no MetaMask needed. The demo starts a real Ethereum chain (Ganache EVM) inside your browser, deploys the compiled `Voting.sol` and seeds the demo election. Use the **Demo wallet** panel (bottom-left) to act as the Admin, Voter 1–5 or an unregistered wallet. Every vote is executed by the smart contract. The chain lives in your tab, so a page reload resets the election. Build it yourself with `cd frontend && npm run build:demo` (output in `dist-demo/`, deployable to any static host).
+
 ## 1. Project overview
 Admin creates an election, adds candidates, registers eligible wallet addresses, then starts and ends voting. Voters connect MetaMask, check eligibility, view candidates and cast **exactly one** vote. Anyone can view the live, verifiable results and every transaction in the built-in explorer.
 
