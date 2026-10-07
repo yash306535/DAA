@@ -1,0 +1,457 @@
+<!doctype html><html><head><meta charset="utf-8"><title>VoteChain Mini Project Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@page { size: A4; margin: 20mm 18mm 20mm 18mm; }
+* { box-sizing: border-box; }
+body { font-family: "Source Serif 4", Georgia, serif; font-size: 11.3pt; line-height: 1.55; color: #111827; margin: 0; }
+h1, h2, h3, h4 { font-family: Inter, Arial, sans-serif; color: #1f1147; }
+h2 { font-size: 17pt; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 2.5px solid #6d28d9; break-after: avoid; }
+h3 { font-size: 12.8pt; margin: 18px 0 6px; color: #4c1d95; break-after: avoid; }
+h4 { font-size: 11.5pt; margin: 12px 0 4px; break-after: avoid; }
+p { margin: 0 0 9px; text-align: justify; }
+ul, ol { margin: 4px 0 10px; padding-left: 22px; } li { margin-bottom: 3px; }
+.page { break-after: page; }
+.chapter { break-before: page; }
+table { width: 100%; border-collapse: collapse; margin: 8px 0 14px; font-family: Inter, Arial; font-size: 9.4pt; break-inside: auto; }
+th { background: #ede9fe; color: #3b0764; text-align: left; padding: 6px 8px; border: 1px solid #c4b5fd; }
+td { padding: 5px 8px; border: 1px solid #ddd6fe; vertical-align: top; }
+tr { break-inside: avoid; }
+tbody tr:nth-child(even) td { background: #faf8ff; }
+code, pre { font-family: "JetBrains Mono", monospace; }
+code { font-size: 9.2pt; background: #f3f0ff; padding: 1px 4px; border-radius: 4px; color: #4c1d95; }
+pre { background: #0f0f2e; color: #e0e7ff; padding: 12px 14px; border-radius: 8px; font-size: 8.6pt; line-height: 1.45; white-space: pre-wrap; break-inside: avoid; }
+figure { margin: 12px 0 16px; text-align: center; break-inside: avoid; }
+figure.diagram svg { width: 100%; height: auto; max-height: 205mm; }
+figure.shot img { max-width: 100%; max-height: 120mm; border: 1px solid #d1d5db; border-radius: 6px; }
+figure.shot.tall img { max-height: 195mm; }
+figure.shot.small img { max-height: 95mm; }
+figcaption { font-family: Inter, Arial; font-size: 9pt; color: #4b5563; margin-top: 6px; font-style: italic; }
+.note { border-left: 4px solid #d97706; background: #fffbeb; padding: 9px 12px; margin: 10px 0 14px; font-size: 10.5pt; break-inside: avoid; }
+.note p:last-child { margin: 0; }
+.kw { font-family: Inter; font-size: 10pt; }
+/* Cover */
+.cover { text-align: center; font-family: "Source Serif 4", serif; padding-top: 4mm; }
+.cover .uni { font-size: 17pt; font-weight: 700; }
+.cover .col { font-size: 14.5pt; font-weight: 700; margin-top: 4px; }
+.cover .addr { font-size: 11pt; }
+.cover .acc { font-size: 10.5pt; font-weight: 700; margin-top: 8px; letter-spacing: .5px; }
+.cover .dept { font-size: 13.5pt; font-weight: 700; margin: 26px 0 0; }
+.cover .a { font-size: 13pt; margin-top: 36px; font-weight: 700; }
+.cover .mpr { font-size: 20pt; font-weight: 700; letter-spacing: 1px; }
+.cover .ttl { font-size: 18pt; font-weight: 700; color: #3b0764; margin: 14px 18mm 4px; line-height: 1.3; }
+.cover .sub { font-size: 12.5pt; font-style: italic; color: #4c1d95; }
+.cover .deg { font-size: 13pt; font-weight: 700; margin-top: 14px; }
+.cover .lbl { font-size: 13pt; font-weight: 700; margin-top: 30px; text-decoration: underline; }
+.cover table { width: 72%; margin: 10px auto; font-family: "Source Serif 4"; font-size: 12.5pt; }
+.cover table td, .cover table th { border: 1px solid #9ca3af; padding: 6px 10px; text-align: center; background: #fff !important; }
+.cover table th { background: #f5f3ff !important; color: #111; }
+.cover .guide { font-size: 14pt; font-weight: 700; margin-top: 6px; }
+.cover .yr { font-size: 12.5pt; margin-top: 14px; }
+.cover .foot { font-size: 12pt; font-weight: 700; margin-top: 26px; }
+.cert { font-family: "Source Serif 4"; text-align: center; padding-top: 12mm; }
+.cert h1 { font-family: "Source Serif 4"; font-size: 22pt; letter-spacing: 3px; color: #111; text-decoration: underline; margin: 26px 0 30px; }
+.cert p { text-align: justify; font-size: 13pt; line-height: 2; }
+.sign { display: flex; justify-content: space-between; margin-top: 46mm; font-size: 12pt; text-align: left; }
+.sign div:last-child { text-align: right; }
+.centerh { text-align: center; font-size: 18pt; border: none; letter-spacing: 1.5px; margin: 6mm 0 8mm; }
+.toc td { border: none; border-bottom: 1px dotted #c4b5fd; font-size: 11pt; padding: 5px 4px; background: #fff !important; font-family: "Source Serif 4"; }
+.toc td.n { width: 40px; font-weight: 600; } .toc td.s { padding-left: 26px; color: #374151; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid2 figure { margin: 6px 0; }
+.grid2 figure.shot img { max-height: 70mm; }
+</style></head><body>
+
+<!-- COVER -->
+<section class="cover page">
+  <div class="uni">Savitribai Phule Pune University</div>
+  <div class="col">Modern Education Society’s Wadia College of Engineering, Pune</div>
+  <div class="addr">19, Bund Garden, V.K. Joag Path, Pune – 411001.</div>
+  <div class="acc">ACCREDITED BY NBA AND NAAC WITH ‘A++’ GRADE</div>
+  <div class="dept">DEPARTMENT OF COMPUTER ENGINEERING</div>
+  <div class="a">A</div>
+  <div class="mpr">MINI PROJECT REPORT</div>
+  <div class="a" style="margin-top:4px">ON</div>
+  <div class="ttl">“Design and Develop a Blockchain-Based Decentralized E-Voting System”</div>
+  <div class="sub">VoteChain – Decentralized E-Voting System</div>
+  <div class="deg">B.E. (COMPUTER)</div>
+  <div class="lbl">SUBMITTED BY</div>
+  <table><thead><tr><th>Name of Student</th><th>PRN</th><th>Roll No.</th></tr></thead>
+  <tbody><tr><td>Yashvant Dayanand Mane</td><td>F24121004</td><td>68</td></tr></tbody></table>
+  <div class="lbl" style="margin-top:22px">GUIDED BY</div>
+  <div class="guide">Dr. S. R. Khonde</div>
+  <div class="yr">(Academic Year: 2026–2027)</div>
+  <div class="foot">DEPARTMENT OF COMPUTER ENGINEERING<br>MODERN EDUCATION SOCIETY’S WADIA COLLEGE OF ENGINEERING, PUNE</div>
+</section>
+
+<!-- CERTIFICATE -->
+<section class="cert page">
+  <div class="col" style="font-size:14pt;font-weight:700">Modern Education Society’s Wadia College of Engineering, Pune</div>
+  <div style="font-size:12pt;font-weight:700;margin-top:4px">Department of Computer Engineering</div>
+  <h1>CERTIFICATE</h1>
+  <p>This is to certify that the Mini Project report entitled <b>“Design and Develop a Blockchain-Based Decentralized E-Voting System” (VoteChain)</b> submitted by
+  <b>Yashvant Dayanand Mane</b> (PRN <b>F24121004</b>, Roll No. <b>68</b>) is a bonafide work carried out by him
+  and submitted during the 2026–27 academic year, in partial fulfillment of the requirements for the award of the degree of
+  <b>BACHELOR OF ENGINEERING</b> in <b>COMPUTER ENGINEERING</b> of Savitribai Phule Pune University, at MESWCOE, Pune.</p>
+  <div class="sign">
+    <div>Dr. S. R. Khonde<br><b>Project Guide</b><br><br>Date :<br>Place : Pune</div>
+    <div>Sign :<br><b>Head of the Department</b><br>Department of Computer Engineering</div>
+  </div>
+</section>
+
+<!-- ACKNOWLEDGEMENT -->
+<section class="page">
+  <h2 class="centerh">ACKNOWLEDGEMENT</h2>
+  <p>I would like to express my sincere gratitude to my respected guide, <b>Dr. S. R. Khonde</b>, for providing valuable guidance,
+  constructive suggestions and continuous support throughout the development of my mini project on
+  <b>“Design and Develop a Blockchain-Based Decentralized E-Voting System”</b>.</p>
+  <p>I am also thankful to the Department of Computer Engineering, Modern Education Society’s Wadia College of Engineering, Pune,
+  for providing the necessary facilities, resources and academic support required for successfully completing this project.
+  I sincerely appreciate the guidance and assistance provided by the faculty members throughout the project.</p>
+  <p>Finally, I thank my family and friends for their encouragement during this work.</p>
+  <p style="text-align:right;margin-top:24mm"><b>Yashvant Dayanand Mane</b><br>PRN: F24121004 · Roll No. 68<br>B.E. Computer Engineering</p>
+</section>
+
+<!-- ABSTRACT -->
+<section class="page">
+  <h2 class="centerh">ABSTRACT</h2>
+  <p>VoteChain is a decentralized electronic voting application in which the complete election is executed by an Ethereum smart
+  contract. An administrator (the contract owner) creates an election, adds candidates, registers the wallet addresses of eligible
+  voters and opens and closes voting. A registered voter connects MetaMask, verifies eligibility, reviews the candidates and casts
+  exactly one vote. The vote is a signed blockchain transaction; the contract validates the election status, voter registration,
+  double voting and the candidate id before updating the on-chain vote count and emitting a <code>VoteCast</code> event.</p>
+  <p>Unlike conventional online voting systems, VoteChain has no central database. The blockchain is the single source of truth for
+  registered voters, candidates, voting status, vote counts and election status, so the results shown on the dashboard can be
+  verified independently by anyone. The system is built with Solidity 0.8.24 and OpenZeppelin <code>Ownable</code>, tested with
+  Hardhat (24 automated test cases, all passing), and a React + Vite + TypeScript frontend using ethers.js v6, Tailwind CSS and
+  Recharts. The application includes a voter dashboard, live results with charts, an admin dashboard and a built-in blockchain
+  explorer that shows the transaction hash, block number, status, timestamp, sender and contract address of every action.</p>
+  <p>The report also discusses the difference between transparency and voter privacy: wallet addresses and transactions on a
+  public blockchain are visible, so votes are pseudonymous, not anonymous. VoteChain is an academic demonstration and is not
+  intended for government elections, which additionally require verified identity, ballot secrecy, coercion resistance and legal infrastructure.</p>
+  <p class="kw"><b>Keywords:</b> blockchain, e-voting, Ethereum, smart contract, Solidity, MetaMask, ethers.js, transparency, tamper resistance, React.</p>
+</section>
+
+<!-- TOC -->
+<section class="page">
+  <h2 class="centerh">TABLE OF CONTENTS</h2>
+  <table class="toc"><tbody>
+  <tr><td class="n">1</td><td class="">Introduction</td></tr><tr><td class="n">2</td><td class="">Problem Statement and Objectives</td></tr><tr><td class="s"></td><td class="s">2.1 Objectives · 2.2 Scope · 2.3 Existing vs Proposed System</td></tr><tr><td class="n">3</td><td class="">Why Blockchain?</td></tr><tr><td class="n">4</td><td class="">System Architecture and Design</td></tr><tr><td class="s"></td><td class="s">4.1 Architecture · 4.2 DFD · 4.3 Use Case · 4.4 Interaction Flow · 4.5 Data Flow</td></tr><tr><td class="n">5</td><td class="">Smart Contract Design (Voting.sol)</td></tr><tr><td class="s"></td><td class="s">5.1 Data Model · 5.2 Functions · 5.3 Access Control · 5.4 Algorithm · 5.5 Life-cycle</td></tr><tr><td class="n">6</td><td class="">Frontend Architecture</td></tr><tr><td class="n">7</td><td class="">Technology Stack and System Requirements</td></tr><tr><td class="n">8</td><td class="">Testing</td></tr><tr><td class="s"></td><td class="s">8.1 Test Cases · 8.2 Gas Usage</td></tr><tr><td class="n">9</td><td class="">Results and Output</td></tr><tr><td class="n">10</td><td class="">Security Considerations, Transparency and Privacy</td></tr><tr><td class="n">11</td><td class="">Limitations and Future Enhancements</td></tr><tr><td class="n">12</td><td class="">Installation, Deployment and Demo Guide</td></tr><tr><td class="n">13</td><td class="">Conclusion</td></tr><tr><td class="n">14</td><td class="">References</td></tr><tr><td class="n">A</td><td class="">Appendix: Mini Project Presentation Points</td></tr>
+  </tbody></table>
+</section>
+
+<section>
+<h2>1. Introduction</h2>
+<p>Elections at every level, from a student council to a nation, depend on trust: voters must believe that only eligible people voted,
+that each person voted once and that the published count matches the ballots cast. In most online voting systems the votes are rows in a
+database controlled by the operator. Voters and candidates must simply trust that the operator, the server administrator or an attacker
+did not alter those rows.</p>
+<p>Blockchain technology offers a different model. A smart contract is a program deployed on a blockchain whose code and state are
+replicated across many nodes and changed only by valid, signed transactions. Once a transaction is included in a block, changing it
+would require rewriting the chain, which is computationally and economically infeasible on a public network. VoteChain uses this
+property to run a complete election inside the <code>Voting</code> smart contract. The web application is only a window onto the
+contract: it never stores votes and never computes results on its own.</p>
+<p>The project is designed as a polished, demonstrable final-year mini project. It runs on a local Hardhat blockchain (chain id 31337) or on
+the Sepolia public testnet, uses MetaMask for identity and transaction signing, and presents the election through a modern dark,
+glassmorphism-style dashboard.</p>
+
+<h2 style="margin-top:22px">2. Problem Statement and Objectives</h2>
+<p><b>Problem statement:</b> Design and develop a secure, transparent and tamper-resistant electronic voting system using blockchain technology,
+in which eligible users connect their crypto wallet, verify their eligibility, view candidates, cast exactly one vote and see
+transparent election results, with all voting data stored and validated by a Solidity smart contract rather than a centralized database.</p>
+<h3>2.1 Objectives</h3>
+<ul>
+<li>Implement a <code>Voting.sol</code> smart contract that manages elections, candidates, voter registration, voting and results.</li>
+<li>Restrict administrative operations to the election owner using OpenZeppelin <code>Ownable</code>.</li>
+<li>Guarantee one vote per registered wallet and reject invalid candidates and out-of-time votes on-chain.</li>
+<li>Emit events (<code>VoterRegistered</code>, <code>CandidateAdded</code>, <code>ElectionStarted</code>, <code>VoteCast</code>, <code>ElectionEnded</code>) for public auditing.</li>
+<li>Build a responsive React + TypeScript dApp with wallet connection, voter dashboard, results, admin and explorer pages.</li>
+<li>Show the full transaction life-cycle: MetaMask confirmation, pending state, block confirmation, hash and explorer link.</li>
+<li>Verify the contract with comprehensive automated tests and document the architecture, DFD, use cases and limitations.</li>
+</ul>
+<h3>2.2 Scope</h3>
+<p>The system targets small, low-stakes elections such as a student council, club or classroom poll, demonstrated on a local or test
+network. It covers the complete election life-cycle for one active election at a time, with the history of previous elections kept on-chain.
+Real-world identity verification (KYC), ballot secrecy and legal compliance are outside the scope and are discussed in Chapter 10.</p>
+<h3>2.3 Existing System vs Proposed System</h3>
+<table class=""><thead><tr><th>Aspect</th><th>Existing / conventional e-voting</th><th>Proposed system – VoteChain</th></tr></thead><tbody><tr><td>Vote storage</td><td>Rows in a central database controlled by the operator.</td><td>State variables of a smart contract replicated on every node.</td></tr><tr><td>Tamper resistance</td><td>An administrator or attacker with DB access can change counts.</td><td>Confirmed transactions cannot be altered; counts change only via <code>vote()</code>.</td></tr><tr><td>Double voting</td><td>Enforced by application code that users cannot inspect.</td><td>Enforced by the public contract (<code>AlreadyVoted</code>).</td></tr><tr><td>Result verification</td><td>Voters must trust the published report.</td><td>Anyone can call <code>getCandidates()</code> or replay <code>VoteCast</code> events.</td></tr><tr><td>Admin control</td><td>Server roles and passwords.</td><td><code>onlyOwner</code> checked by the contract itself.</td></tr><tr><td>Audit trail</td><td>Server logs that can be edited or deleted.</td><td>Immutable event log with tx hash, block and timestamp.</td></tr><tr><td>Single point of failure</td><td>Central server / database.</td><td>Decentralized network of nodes (on a public chain).</td></tr></tbody></table>
+</section>
+
+<section class="chapter">
+<h2>3. Why Blockchain?</h2>
+<ul>
+<li><b>Immutability:</b> each block contains the hash of the previous block; changing an old vote would change every later hash and be rejected by the network.</li>
+<li><b>Single source of truth:</b> every node computes the same contract state, so the results page, the admin page and an external auditor read identical numbers.</li>
+<li><b>Programmable rules:</b> the voting rules (who, when, how many times, for whom) are code that executes the same way for everybody and cannot be skipped by the frontend.</li>
+<li><b>Cryptographic identity:</b> a vote is valid only if it is signed by the private key of a registered address; nobody can vote on someone else’s behalf without that key.</li>
+<li><b>Public auditability:</b> events and transactions are permanently available; anyone can recount the election from the event log.</li>
+<li><b>No trusted operator:</b> once the contract is deployed, even the administrator cannot change a vote or a count; the admin can only perform the actions the contract allows.</li>
+</ul>
+<div class="note"><p><b>Important:</b> these benefits concern <i>integrity</i> and <i>transparency</i>. They do not by themselves provide ballot secrecy or real-world identity. See Chapter 10.</p></div>
+
+<h2 style="margin-top:22px">4. System Architecture and Design</h2>
+<h3>4.1 System Architecture</h3>
+<p>The architecture follows the flow <b>Frontend → MetaMask → ethers.js → Ethereum-compatible blockchain → Voting smart contract</b>.
+Write operations (vote, admin actions) are signed in MetaMask; read operations use a read-only JSON-RPC provider so that results are
+visible even without a wallet. Contract address, ABI, chain id and explorer URL are loaded from environment variables through
+a single configuration file, <code>contracts/config.ts</code>.</p>
+<figure class="diagram"><svg viewBox="0 0 860 560" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Arial" font-size="13">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker></defs><rect x="330" y="10" width="200" height="46" rx="10" fill="#f3f4f6" stroke="#374151" stroke-width="1.6"/><text x="430.0" y="25.8" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Users</text><text x="430.0" y="40.2" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Admin · Voter · Observer</text><line x1="430" y1="56" x2="430" y2="84" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><rect x="60" y="86" width="740" height="128" rx="14" fill="#faf5ff" stroke="#6d28d9" stroke-width="1.6"/><text x="430" y="106.0" text-anchor="middle" dominant-baseline="middle" font-size="14" font-weight="700" fill="#6d28d9">Frontend · React + Vite + TypeScript + Tailwind CSS</text><rect x="80" y="124" width="160" height="72" rx="10" fill="#fff" stroke="#6d28d9" stroke-width="1.6"/><text x="160.0" y="146.8" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">Pages</text><text x="160.0" y="160.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">Home · Vote · Results</text><text x="160.0" y="173.20000000000002" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">Admin · Explorer</text><rect x="258" y="124" width="160" height="72" rx="10" fill="#fff" stroke="#6d28d9" stroke-width="1.6"/><text x="338.0" y="146.8" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">Hooks (state)</text><text x="338.0" y="160.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">useWallet · useElection</text><text x="338.0" y="173.20000000000002" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">useTransactions</text><rect x="436" y="124" width="160" height="72" rx="10" fill="#fff" stroke="#6d28d9" stroke-width="1.6"/><text x="516.0" y="146.8" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">Services</text><text x="516.0" y="160.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">votingService.ts</text><text x="516.0" y="173.20000000000002" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">(read / write calls)</text><rect x="614" y="124" width="168" height="72" rx="10" fill="#fff" stroke="#6d28d9" stroke-width="1.6"/><text x="698.0" y="146.8" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">contracts/config.ts</text><text x="698.0" y="160.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">address · ABI · chainId</text><text x="698.0" y="173.20000000000002" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">explorer URL (.env)</text><line x1="300" y1="214" x2="300" y2="252" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="248.0" y="233.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">write: sign tx</text><rect x="200" y="254" width="200" height="52" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="1.6"/><text x="300.0" y="272.8" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">MetaMask (EIP-1193)</text><text x="300.0" y="287.2" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">private key · signs tx</text><line x1="300" y1="306" x2="300" y2="336" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><rect x="200" y="338" width="200" height="46" rx="10" fill="#e0e7ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="300.0" y="353.8" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">ethers.js v6</text><text x="300.0" y="368.2" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">ABI encode / decode</text><polyline points="560,214 560,361 402,361" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="640" y="293.4" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">read-only JSON-RPC</text><text x="640" y="306.59999999999997" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">(no wallet needed)</text><line x1="300" y1="384" x2="300" y2="414" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><rect x="60" y="416" width="740" height="130" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="430" y="436.0" text-anchor="middle" dominant-baseline="middle" font-size="14" font-weight="700" fill="#1d4ed8">Ethereum-compatible blockchain · Hardhat Local (31337) / Sepolia (11155111)</text><rect x="90" y="456" width="300" height="76" rx="10" fill="#fff" stroke="#1d4ed8" stroke-width="1.6"/><text x="240.0" y="479.6" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Voting.sol smart contract</text><text x="240.0" y="494.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Ownable · modifiers · custom errors</text><text x="240.0" y="508.40000000000003" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">vote() · admin functions · views</text><rect x="420" y="456" width="170" height="76" rx="10" fill="#fff" stroke="#1d4ed8" stroke-width="1.6"/><text x="505.0" y="480.8" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">Contract storage</text><text x="505.0" y="494.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">elections · candidates</text><text x="505.0" y="507.2" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">voters · vote counts</text><rect x="610" y="456" width="170" height="76" rx="10" fill="#fff" stroke="#1d4ed8" stroke-width="1.6"/><text x="695.0" y="480.8" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">Event log</text><text x="695.0" y="494.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">VoteCast · VoterRegistered</text><text x="695.0" y="507.2" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#111827">CandidateAdded …</text><line x1="390" y1="494" x2="418" y2="494" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><line x1="590" y1="494" x2="608" y2="494" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/></svg><figcaption>Figure 1: System architecture of VoteChain</figcaption></figure>
+</section>
+
+<section class="chapter">
+<h3>4.2 Data Flow Diagrams</h3>
+<p>The Level 0 DFD shows VoteChain as a single process with three external entities. The Level 1 DFD decomposes it into six processes.
+All four data stores (D1–D4) are on-chain; there is no off-chain database.</p>
+<figure class="diagram"><svg viewBox="0 0 860 330" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Arial" font-size="13">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker></defs><rect x="20" y="40" width="170" height="56" rx="10" fill="#f3f4f6" stroke="#374151" stroke-width="1.6"/><text x="105.0" y="60.2" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#111827">Election Admin</text><text x="105.0" y="75.8" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#111827">(contract owner)</text><rect x="20" y="230" width="170" height="56" rx="10" fill="#f3f4f6" stroke="#374151" stroke-width="1.6"/><text x="105.0" y="250.2" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#111827">Voter</text><text x="105.0" y="265.8" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#111827">(registered wallet)</text><rect x="670" y="135" width="170" height="56" rx="10" fill="#f3f4f6" stroke="#374151" stroke-width="1.6"/><text x="755.0" y="163.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#111827">Public Observer</text><circle cx="430" cy="163" r="105" fill="#e0e7ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="430" y="146.2" text-anchor="middle" dominant-baseline="middle" font-size="14" font-weight="600" fill="#111827">0.0</text><text x="430" y="163.0" text-anchor="middle" dominant-baseline="middle" font-size="14" font-weight="600" fill="#111827">VoteChain</text><text x="430" y="179.79999999999998" text-anchor="middle" dominant-baseline="middle" font-size="14" font-weight="600" fill="#111827">E-Voting System</text><line x1="190" y1="60" x2="340" y2="110" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="255.0" y="52.4" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">election, candidates,</text><text x="255.0" y="65.6" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">voter addresses, start/end</text><line x1="330" y1="140" x2="190" y2="84" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="250.0" y="126.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">tx receipts, statistics</text><line x1="190" y1="248" x2="340" y2="210" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="245.0" y="249.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">connect wallet, vote(candidateId)</text><line x1="332" y1="228" x2="190" y2="270" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="231.0" y="275.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">eligibility, status, tx hash</text><line x1="535" y1="150" x2="670" y2="150" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="602.5" y="138.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">results, events</text><line x1="670" y1="178" x2="535" y2="178" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="602.5" y="192.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">query / verify</text></svg><figcaption>Figure 2: DFD Level 0 (context diagram)</figcaption></figure>
+<figure class="diagram"><svg viewBox="0 0 880 560" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Arial" font-size="13">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker></defs><rect x="10" y="20" width="130" height="46" rx="10" fill="#f3f4f6" stroke="#374151" stroke-width="1.6"/><text x="75.0" y="43.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#111827">Admin</text><rect x="10" y="300" width="130" height="46" rx="10" fill="#f3f4f6" stroke="#374151" stroke-width="1.6"/><text x="75.0" y="323.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#111827">Voter</text><rect x="740" y="300" width="130" height="46" rx="10" fill="#f3f4f6" stroke="#374151" stroke-width="1.6"/><text x="805.0" y="323.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#111827">Observer</text><circle cx="250" cy="60" r="50" fill="#e0e7ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="250" y="46.8" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">1.0</text><text x="250" y="60.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">Wallet</text><text x="250" y="73.19999999999999" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">Connect</text><circle cx="440" cy="60" r="50" fill="#e0e7ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="440" y="46.8" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">2.0</text><text x="440" y="60.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">Manage</text><text x="440" y="73.19999999999999" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">Election</text><circle cx="630" cy="60" r="50" fill="#e0e7ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="630" y="46.8" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">3.0</text><text x="630" y="60.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">Register</text><text x="630" y="73.19999999999999" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">Voters</text><circle cx="300" cy="320" r="55" fill="#e0e7ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="300" y="305.6" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">4.0</text><text x="300" y="320.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Cast</text><text x="300" y="334.40000000000003" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Vote</text><circle cx="560" cy="320" r="55" fill="#e0e7ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="560" y="305.6" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">5.0</text><text x="560" y="320.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Compute</text><text x="560" y="334.40000000000003" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Results</text><circle cx="560" cy="480" r="50" fill="#e0e7ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="560" y="466.8" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">6.0</text><text x="560" y="480.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">Explorer /</text><text x="560" y="493.2" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">Audit</text><line x1="330" y1="170" x2="480" y2="170" stroke="#374151" stroke-width="1.6"/><line x1="330" y1="204" x2="480" y2="204" stroke="#374151" stroke-width="1.6"/><line x1="330" y1="170" x2="330" y2="204" stroke="#374151" stroke-width="1.6"/><text x="411.0" y="187.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">D1 Elections</text><line x1="500" y1="170" x2="660" y2="170" stroke="#374151" stroke-width="1.6"/><line x1="500" y1="204" x2="660" y2="204" stroke="#374151" stroke-width="1.6"/><line x1="500" y1="170" x2="500" y2="204" stroke="#374151" stroke-width="1.6"/><text x="586.0" y="187.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">D2 Candidates</text><line x1="690" y1="170" x2="830" y2="170" stroke="#374151" stroke-width="1.6"/><line x1="690" y1="204" x2="830" y2="204" stroke="#374151" stroke-width="1.6"/><line x1="690" y1="170" x2="690" y2="204" stroke="#374151" stroke-width="1.6"/><text x="766.0" y="187.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">D3 Voters</text><line x1="80" y1="450" x2="250" y2="450" stroke="#374151" stroke-width="1.6"/><line x1="80" y1="484" x2="250" y2="484" stroke="#374151" stroke-width="1.6"/><line x1="80" y1="450" x2="80" y2="484" stroke="#374151" stroke-width="1.6"/><text x="171.0" y="467.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">D4 Event log</text><line x1="140" y1="43" x2="198" y2="52" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><line x1="300" y1="60" x2="388" y2="60" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="344.0" y="51.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">address</text><line x1="490" y1="60" x2="578" y2="60" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><line x1="440" y1="110" x2="410" y2="168" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="385.0" y="139.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">title, times</text><line x1="470" y1="108" x2="560" y2="168" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="555.0" y="134.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">name, party</text><line x1="650" y1="110" x2="740" y2="168" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="747.0" y="135.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">registered=true</text><line x1="140" y1="320" x2="243" y2="320" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="191.5" y="311.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">candidateId</text><line x1="405" y1="204" x2="330" y2="268" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="337.5" y="236.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">status</text><line x1="740" y1="204" x2="350" y2="280" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="585.0" y="230.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">check registered / hasVoted</text><line x1="340" y1="362" x2="545" y2="210" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="452.5" y="326.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">voteCount + 1</text><line x1="260" y1="368" x2="200" y2="448" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="200.0" y="408.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">VoteCast</text><line x1="580" y1="204" x2="566" y2="263" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="601.0" y="233.5" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">counts</text><line x1="615" y1="320" x2="740" y2="320" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="677.5" y="311.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">results, winner</text><line x1="250" y1="466" x2="508" y2="478" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="379.0" y="462.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">events</text><line x1="610" y1="480" x2="760" y2="348" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="715.0" y="424.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">tx details</text></svg><figcaption>Figure 3: DFD Level 1</figcaption></figure>
+</section>
+
+<section class="chapter">
+<h3>4.3 Use Case Diagram</h3>
+<figure class="diagram"><svg viewBox="0 0 880 590" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Arial" font-size="13">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker></defs><rect x="150" y="10" width="560" height="560" rx="16" fill="#fafafa" stroke="#374151" stroke-width="1.4"/><text x="430" y="30.0" text-anchor="middle" dominant-baseline="middle" font-size="14" font-weight="700" fill="#111827">VoteChain System</text><ellipse cx="300" cy="60" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="60.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">Create election</text><line x1="80" y1="140" x2="188" y2="60" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="300" cy="104" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="104.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">Add candidates</text><line x1="80" y1="140" x2="188" y2="104" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="300" cy="148" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="148.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">Register voters</text><line x1="80" y1="140" x2="188" y2="148" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="300" cy="192" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="192.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">Start election</text><line x1="80" y1="140" x2="188" y2="192" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="300" cy="236" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="236.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">End election</text><line x1="80" y1="140" x2="188" y2="236" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="300" cy="280" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="280.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">View statistics &amp; events</text><line x1="80" y1="140" x2="188" y2="280" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="300" cy="330" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="330.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">Connect wallet</text><line x1="80" y1="420" x2="188" y2="330" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="300" cy="374" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="374.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">Check eligibility</text><line x1="80" y1="420" x2="188" y2="374" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="300" cy="418" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="418.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">View candidates</text><line x1="80" y1="420" x2="188" y2="418" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="300" cy="462" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="462.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">Cast vote (once)</text><line x1="80" y1="420" x2="188" y2="462" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="300" cy="506" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="300" y="506.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">View tx on explorer</text><line x1="80" y1="420" x2="188" y2="506" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="570" cy="150" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="570" y="150.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">View live results</text><line x1="790" y1="200" x2="682" y2="150" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="570" cy="210" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="570" y="210.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">Verify events on-chain</text><line x1="790" y1="200" x2="682" y2="210" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="570" cy="420" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="570" y="420.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">Ownership check (onlyOwner)</text><line x1="412" y1="104" x2="470" y2="410" stroke="#9ca3af" stroke-width="1.2"/><ellipse cx="570" cy="500" rx="112" ry="22" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.4"/><text x="570" y="500.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="500" fill="#111827">Validate vote (contract)</text><line x1="412" y1="462" x2="458" y2="500" stroke="#9ca3af" stroke-width="1.2"/><circle cx="60" cy="100" r="13" fill="none" stroke="#374151" stroke-width="1.6"/><line x1="60" y1="113" x2="60" y2="148" stroke="#374151" stroke-width="1.6"/><line x1="40" y1="126" x2="80" y2="126" stroke="#374151" stroke-width="1.6"/><line x1="60" y1="148" x2="44" y2="172" stroke="#374151" stroke-width="1.6"/><line x1="60" y1="148" x2="76" y2="172" stroke="#374151" stroke-width="1.6"/><text x="60" y="190.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#111827">Admin</text><circle cx="60" cy="380" r="13" fill="none" stroke="#374151" stroke-width="1.6"/><line x1="60" y1="393" x2="60" y2="428" stroke="#374151" stroke-width="1.6"/><line x1="40" y1="406" x2="80" y2="406" stroke="#374151" stroke-width="1.6"/><line x1="60" y1="428" x2="44" y2="452" stroke="#374151" stroke-width="1.6"/><line x1="60" y1="428" x2="76" y2="452" stroke="#374151" stroke-width="1.6"/><text x="60" y="470.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#111827">Voter</text><circle cx="810" cy="160" r="13" fill="none" stroke="#374151" stroke-width="1.6"/><line x1="810" y1="173" x2="810" y2="208" stroke="#374151" stroke-width="1.6"/><line x1="790" y1="186" x2="830" y2="186" stroke="#374151" stroke-width="1.6"/><line x1="810" y1="208" x2="794" y2="232" stroke="#374151" stroke-width="1.6"/><line x1="810" y1="208" x2="826" y2="232" stroke="#374151" stroke-width="1.6"/><text x="810" y="250.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#111827">Public</text></svg><figcaption>Figure 4: Use case diagram: Admin, Voter and Public observer</figcaption></figure>
+</section>
+
+<section class="chapter">
+<h3>4.4 Smart Contract Interaction Flow (Casting a Vote)</h3>
+<p>Before MetaMask is opened, ethers.js estimates gas, which runs the contract checks in a dry run. An invalid vote (for example a
+second vote) is therefore reported to the user with a friendly message before any fee is paid.</p>
+<figure class="diagram"><svg viewBox="0 0 860 610" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Arial" font-size="13">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker></defs><rect x="-2" y="8" width="124" height="36" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.6"/><text x="60.0" y="26.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Voter</text><line x1="60" y1="44" x2="60" y2="600" stroke="#9ca3af" stroke-dasharray="4 4"/><rect x="143" y="8" width="124" height="36" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.6"/><text x="205.0" y="26.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">React UI</text><line x1="205" y1="44" x2="205" y2="600" stroke="#9ca3af" stroke-dasharray="4 4"/><rect x="288" y="8" width="124" height="36" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.6"/><text x="350.0" y="26.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">MetaMask</text><line x1="350" y1="44" x2="350" y2="600" stroke="#9ca3af" stroke-dasharray="4 4"/><rect x="433" y="8" width="124" height="36" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.6"/><text x="495.0" y="26.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">ethers.js</text><line x1="495" y1="44" x2="495" y2="600" stroke="#9ca3af" stroke-dasharray="4 4"/><rect x="578" y="8" width="124" height="36" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.6"/><text x="640.0" y="26.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Blockchain node</text><line x1="640" y1="44" x2="640" y2="600" stroke="#9ca3af" stroke-dasharray="4 4"/><rect x="728" y="8" width="124" height="36" rx="10" fill="#e0e7ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="790.0" y="26.0" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Voting.sol</text><line x1="790" y1="44" x2="790" y2="600" stroke="#9ca3af" stroke-dasharray="4 4"/><line x1="60" y1="70" x2="199" y2="70" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="129.5" y="61.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">click Vote → confirm modal</text><line x1="205" y1="105" x2="489" y2="105" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="347.0" y="96.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">contract.vote(id)</text><line x1="495" y1="140" x2="634" y2="140" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="564.5" y="131.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">eth_estimateGas (dry run)</text><line x1="640" y1="175" x2="784" y2="175" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="712.0" y="166.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">execute checks</text><line x1="790" y1="210" x2="646" y2="210" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="718.0" y="201.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">ok / revert(custom error)</text><line x1="495" y1="245" x2="356" y2="245" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="425.5" y="236.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">eth_sendTransaction</text><line x1="350" y1="280" x2="66" y2="280" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="208.0" y="271.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">show gas, ask approval</text><line x1="60" y1="315" x2="344" y2="315" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="202.0" y="306.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">Confirm</text><line x1="350" y1="350" x2="634" y2="350" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="492.0" y="341.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">signed transaction</text><line x1="640" y1="385" x2="784" y2="385" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="712.0" y="376.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">vote(): checks → effects</text><line x1="790" y1="420" x2="646" y2="420" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="718.0" y="411.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">VoteCast event, state saved</text><line x1="640" y1="455" x2="501" y2="455" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="570.5" y="446.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">tx hash → receipt (mined)</text><line x1="495" y1="490" x2="211" y2="490" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="353.0" y="481.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">receipt: block, status</text><line x1="205" y1="525" x2="66" y2="525" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="135.5" y="516.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">✓ recorded + hash + explorer link</text><line x1="205" y1="560" x2="784" y2="560" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="494.5" y="551.0" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="500" fill="#4b5563">refresh: getCandidates(), getVoterStatus()</text></svg><figcaption>Figure 5: Sequence diagram of the vote transaction</figcaption></figure>
+<h3>4.5 Blockchain Data Flow Explanation</h3>
+<p>VoteChain replaces the traditional database with contract storage. Writes travel as transactions: the frontend builds the call with the ABI,
+MetaMask signs it, a node executes <code>Voting.sol</code> and the resulting state change is stored once the transaction is mined. Reads are free
+<code>eth_call</code> requests to view functions (<code>getElectionInfo</code>, <code>getCandidates</code>, <code>getVoterStatus</code>, <code>getWinners</code>).
+The frontend polls these every five seconds, so all dashboards stay in sync. Events are read with <code>eth_getLogs</code> from the deployment block
+and are used by the admin activity feed and the built-in explorer.</p>
+<table class=""><thead><tr><th>Data</th><th>On-chain location</th><th>Written by</th><th>Read by</th></tr></thead><tbody><tr><td>Election (title, start, end, started, ended)</td><td><code>_elections[id]</code></td><td>createElection / startElection / endElection</td><td>getElection(), getElectionInfo()</td></tr><tr><td>Candidates and vote counts</td><td><code>_candidates[id][]</code></td><td>addCandidate, vote</td><td>getCandidates(), getCandidate()</td></tr><tr><td>Voter registration and voted flag</td><td><code>_voters[id][address]</code></td><td>registerVoter(s), vote</td><td>getVoterStatus()</td></tr><tr><td>Totals</td><td><code>registeredVoterCount</code>, <code>totalVotes</code></td><td>registerVoter(s), vote</td><td>getElectionInfo()</td></tr><tr><td>Audit trail</td><td>Event log</td><td>every state-changing function</td><td>Explorer page, admin feed</td></tr></tbody></table>
+</section>
+
+<section class="chapter">
+<h2>5. Smart Contract Design (Voting.sol)</h2>
+<h3>5.1 Data Model</h3>
+<table class=""><thead><tr><th>Structure</th><th>Fields</th><th>Purpose</th></tr></thead><tbody><tr><td>Candidate</td><td>uint256 id, string name, string party, string manifesto, uint256 voteCount</td><td>A candidate and their live on-chain vote count.</td></tr><tr><td>Voter</td><td>bool registered, bool hasVoted</td><td>Eligibility and one-vote enforcement per address.</td></tr><tr><td>Election</td><td>string title, uint256 startTime, uint256 endTime, bool started, bool ended</td><td>Status and timing of an election.</td></tr><tr><td>ElectionInfo</td><td>id, title, times, flags, votingOpen, candidateCount, registeredVoters, totalVotes</td><td>Summary returned to the dashboard in one call.</td></tr></tbody></table>
+<p>All mappings are keyed by an <b>election id</b>, so a new election starts with clean candidate and voter lists while previous results remain verifiable.</p>
+<h3>5.2 Functions</h3>
+<table class=""><thead><tr><th>Function</th><th>Access</th><th>Description</th></tr></thead><tbody><tr><td>createElection(title)</td><td>onlyOwner</td><td>Creates a new election (only if none exists or the last one ended).</td></tr><tr><td>addCandidate(name, party, manifesto)</td><td>onlyOwner, beforeStart</td><td>Adds a candidate with the next id (ids start at 1).</td></tr><tr><td>registerVoter(address) / registerVoters(address[])</td><td>onlyOwner</td><td>Authorizes one or many wallets; rejects zero and duplicate addresses.</td></tr><tr><td>startElection(durationSeconds)</td><td>onlyOwner, beforeStart</td><td>Opens voting; optional automatic deadline (0 = manual end).</td></tr><tr><td>endElection()</td><td>onlyOwner</td><td>Closes voting permanently and freezes results.</td></tr><tr><td>vote(candidateId)</td><td>registered voter, onlyWhileOpen</td><td>Casts exactly one vote and emits VoteCast.</td></tr><tr><td>getElectionInfo(), isVotingOpen()</td><td>public view</td><td>Status of the current election.</td></tr><tr><td>getCandidates(), getCandidate(id), getCandidatesOf(electionId)</td><td>public view</td><td>Candidates with vote counts (current or historic).</td></tr><tr><td>getVoterStatus(address)</td><td>public view</td><td>Registered / has-voted flags.</td></tr><tr><td>getWinners()</td><td>public view</td><td>Winning candidate id(s) and highest count; several ids mean a tie.</td></tr></tbody></table>
+<h3>5.3 Access Control, Modifiers, Events and Errors</h3>
+<p>Administrative functions use OpenZeppelin’s <code>onlyOwner</code>; the owner is the deploying account. Two custom modifiers enforce the
+election phase. Custom errors are used instead of revert strings to save gas; the frontend decodes them into readable messages.</p>
+<pre>modifier onlyWhileOpen() {
+    if (currentElectionId == 0) revert NoElection();
+    Election storage e = _elections[currentElectionId];
+    if (!e.started) revert ElectionNotStarted();
+    if (e.ended || (e.endTime != 0 &amp;&amp; block.timestamp &gt; e.endTime)) revert ElectionNotActive();
+    _;
+}</pre>
+<table class=""><thead><tr><th>Events</th><th>Custom errors (revert reasons)</th></tr></thead><tbody><tr><td>ElectionCreated, CandidateAdded, VoterRegistered, ElectionStarted, VoteCast, ElectionEnded</td><td>NoElection, PreviousElectionNotEnded, ElectionAlreadyStarted, ElectionNotStarted, ElectionAlreadyEnded, ElectionNotActive, EmptyField, NoCandidates, InvalidCandidate, InvalidAddress, AlreadyRegistered, NotRegistered, AlreadyVoted, OwnableUnauthorizedAccount</td></tr></tbody></table>
+<h3>5.4 Vote Algorithm</h3>
+<p><b>Input:</b> <code>candidateId</code>, sender address. <b>Steps:</b> 1) Check an election exists and has started. 2) Check it has not ended and the
+deadline (if any) has not passed. 3) Check the sender is registered. 4) Check the sender has not voted. 5) Check 1 ≤ id ≤ number of candidates.
+6) Set <code>hasVoted = true</code>. 7) Increment the candidate’s <code>voteCount</code> and <code>totalVotes</code>. 8) Emit <code>VoteCast</code>.
+The function follows the checks-effects pattern and makes no external calls, so there is no re-entrancy surface.</p>
+<pre>function vote(uint256 candidateId) external onlyWhileOpen {
+    uint256 id = currentElectionId;
+    Voter storage v = _voters[id][msg.sender];
+    if (!v.registered) revert NotRegistered();
+    if (v.hasVoted) revert AlreadyVoted();
+    if (candidateId == 0 || candidateId &gt; _candidates[id].length) revert InvalidCandidate();
+
+    v.hasVoted = true;                                   // effects only, no external calls
+    _candidates[id][candidateId - 1].voteCount += 1;
+    totalVotes[id] += 1;
+    emit VoteCast(id, msg.sender, candidateId);
+}</pre>
+</section>
+
+<section class="chapter">
+<figure class="diagram"><svg viewBox="0 0 860 536" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Arial" font-size="13">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker></defs><rect x="330" y="6" width="200" height="38" rx="10" fill="#e0e7ff" stroke="#1d4ed8" stroke-width="1.6"/><text x="430.0" y="25.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#111827">vote(candidateId)</text><line x1="430" y1="44" x2="430" y2="63" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><polygon points="430,64 560,94 430,124 300,94" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/><text x="430" y="94.0" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="600" fill="#111827">Election exists &amp; started?</text><line x1="560" y1="94" x2="650" y2="94" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="605.0" y="85.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">No</text><rect x="652" y="77" width="190" height="34" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.6"/><text x="747.0" y="94.0" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="600" fill="#111827">revert ElectionNotStarted</text><text x="445" y="134.0" text-anchor="start" dominant-baseline="middle" font-size="11" font-weight="600" fill="#4b5563">Yes</text><line x1="430" y1="124" x2="430" y2="141" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><polygon points="430,142 560,172 430,202 300,172" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/><text x="430" y="172.0" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="600" fill="#111827">Not ended &amp; before deadline?</text><line x1="560" y1="172" x2="650" y2="172" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="605.0" y="163.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">No</text><rect x="652" y="155" width="190" height="34" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.6"/><text x="747.0" y="172.0" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="600" fill="#111827">revert ElectionNotActive</text><text x="445" y="212.0" text-anchor="start" dominant-baseline="middle" font-size="11" font-weight="600" fill="#4b5563">Yes</text><line x1="430" y1="202" x2="430" y2="219" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><polygon points="430,220 560,250 430,280 300,250" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/><text x="430" y="250.0" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="600" fill="#111827">Voter registered?</text><line x1="560" y1="250" x2="650" y2="250" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="605.0" y="241.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">No</text><rect x="652" y="233" width="190" height="34" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.6"/><text x="747.0" y="250.0" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="600" fill="#111827">revert NotRegistered</text><text x="445" y="290.0" text-anchor="start" dominant-baseline="middle" font-size="11" font-weight="600" fill="#4b5563">Yes</text><line x1="430" y1="280" x2="430" y2="297" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><polygon points="430,298 560,328 430,358 300,328" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/><text x="430" y="328.0" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="600" fill="#111827">Not voted already?</text><line x1="560" y1="328" x2="650" y2="328" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="605.0" y="319.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">No</text><rect x="652" y="311" width="190" height="34" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.6"/><text x="747.0" y="328.0" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="600" fill="#111827">revert AlreadyVoted</text><text x="445" y="368.0" text-anchor="start" dominant-baseline="middle" font-size="11" font-weight="600" fill="#4b5563">Yes</text><line x1="430" y1="358" x2="430" y2="375" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><polygon points="430,376 560,406 430,436 300,406" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/><text x="430" y="406.0" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="600" fill="#111827">1 ≤ id ≤ candidateCount?</text><line x1="560" y1="406" x2="650" y2="406" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="605.0" y="397.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">No</text><rect x="652" y="389" width="190" height="34" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.6"/><text x="747.0" y="406.0" text-anchor="middle" dominant-baseline="middle" font-size="11.5" font-weight="600" fill="#111827">revert InvalidCandidate</text><text x="445" y="446.0" text-anchor="start" dominant-baseline="middle" font-size="11" font-weight="600" fill="#4b5563">Yes</text><line x1="430" y1="436" x2="430" y2="462" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><rect x="280" y="464" width="300" height="58" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/><text x="430.0" y="485.8" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">hasVoted = true · voteCount += 1</text><text x="430.0" y="500.2" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">totalVotes += 1 · emit VoteCast</text></svg><figcaption>Figure 6: Vote validation flowchart inside Voting.sol</figcaption></figure>
+<h3>5.5 Election Life-cycle</h3>
+<figure class="diagram"><svg viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Arial" font-size="13">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#374151"/></marker></defs><rect x="20" y="70" width="120" height="46" rx="10" fill="#f3f4f6" stroke="#374151" stroke-width="1.6"/><text x="80.0" y="93.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#111827">No election</text><rect x="210" y="70" width="140" height="46" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.6"/><text x="280.0" y="85.8" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Setup</text><text x="280.0" y="100.19999999999999" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">(candidates, voters)</text><rect x="430" y="70" width="130" height="46" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="1.6"/><text x="495.0" y="85.8" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Active</text><text x="495.0" y="100.19999999999999" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">(voting open)</text><rect x="640" y="70" width="130" height="46" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.6"/><text x="705.0" y="85.8" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">Ended</text><text x="705.0" y="100.19999999999999" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#111827">(results final)</text><rect x="430" y="180" width="130" height="46" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="1.6"/><text x="495.0" y="196.4" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">Deadline passed</text><text x="495.0" y="209.6" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#111827">(votes rejected)</text><line x1="140" y1="93" x2="208" y2="93" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="174.0" y="81.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">createElection</text><line x1="350" y1="93" x2="428" y2="93" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="389.0" y="81.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">startElection</text><line x1="560" y1="93" x2="638" y2="93" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="599.0" y="81.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">endElection</text><line x1="495" y1="116" x2="495" y2="178" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="545.0" y="147.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">time &gt; endTime</text><polyline points="560,203 705,203 705,118" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="640" y="190.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">endElection</text><polyline points="705,70 705,30 280,30 280,68" fill="none" stroke="#374151" stroke-width="1.5" marker-end="url(#ar)"/><text x="490" y="20.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#4b5563">createElection (new id)</text></svg><figcaption>Figure 7: Election state diagram</figcaption></figure>
+</section>
+
+<section class="chapter">
+<h2>6. Frontend Architecture</h2>
+<p>The frontend is a single-page React 18 application written in TypeScript and bundled with Vite. It is organised in layers so that
+only one module talks to the blockchain.</p>
+<table class=""><thead><tr><th>Folder / module</th><th>Responsibility</th></tr></thead><tbody><tr><td>contracts/config.ts, VotingABI.json</td><td>Contract address, ABI, chain id, chain name, RPC and explorer URL from <code>.env</code> (written by the deploy script).</td></tr><tr><td>services/votingService.ts</td><td>All ethers.js calls: read provider, contract instances, election/candidate/voter reads, event queries, transaction details.</td></tr><tr><td>hooks/useWallet.tsx</td><td>MetaMask connection, auto-reconnect, accountsChanged / chainChanged, network switch / add, signer.</td></tr><tr><td>hooks/useElection.tsx</td><td>Election, candidates, voter status, owner, winners; polls the contract every 5 s.</td></tr><tr><td>hooks/useTransactions.tsx</td><td>Runs a transaction: awaiting signature → pending → confirmed/failed; toasts; refresh.</td></tr><tr><td>utils/errors.ts</td><td>Maps custom errors and wallet errors (rejected, insufficient gas, wrong network, unavailable contract) to friendly text.</td></tr><tr><td>components/</td><td>Navbar, Footer, animated network background, glass cards, candidate card, confirm modal, transaction modal, skeletons.</td></tr><tr><td>pages/</td><td>Home, Connect Wallet, Vote (voter dashboard), Results, How It Works, Admin, Explorer, Not Found.</td></tr></tbody></table>
+<table class=""><thead><tr><th>Page</th><th>Main features</th></tr></thead><tbody><tr><td>Home</td><td>Hero “Decentralized Voting. Transparent Results.”, live election status card, how-it-works, security features, privacy note.</td></tr><tr><td>Connect Wallet</td><td>Address, connected vs required network, eligibility, role; handles missing MetaMask, rejection and wrong network.</td></tr><tr><td>Vote</td><td>Wallet, eligibility, election and voting status; candidate cards; confirmation modal; “You have already voted ✓”.</td></tr><tr><td>Results</td><td>Registered voters, votes cast, turnout, bar chart, donut chart, ranking with progress bars, winner after the election ends.</td></tr><tr><td>Admin</td><td>Owner-only: create/start/end election, add candidates, batch register voters, statistics, vote counts, event history.</td></tr><tr><td>Explorer</td><td>Every contract event with tx hash, block, status, timestamp, from and contract address; search; transaction details.</td></tr></tbody></table>
+<p>Admin routes are hidden for non-owners in the UI, but the real protection is on-chain: even a forged request from another address is
+rejected with <code>OwnableUnauthorizedAccount</code>.</p>
+
+<h2 style="margin-top:22px">7. Technology Stack and System Requirements</h2>
+<table class=""><thead><tr><th>Layer</th><th>Technology</th></tr></thead><tbody><tr><td>Smart contract</td><td>Solidity 0.8.24, OpenZeppelin Contracts 5 (Ownable)</td></tr><tr><td>Development / test</td><td>Hardhat 2, hardhat-toolbox, Mocha + Chai, TypeScript, ethers.js v6</td></tr><tr><td>Network</td><td>Hardhat Local (chain id 31337) or Sepolia testnet (11155111)</td></tr><tr><td>Frontend</td><td>React 18, Vite 6, TypeScript 5, React Router 6</td></tr><tr><td>UI</td><td>Tailwind CSS 4, Lucide React icons, Recharts, react-hot-toast</td></tr><tr><td>Wallet / Web3</td><td>MetaMask (EIP-1193), ethers.js v6 BrowserProvider and JsonRpcProvider</td></tr><tr><td>Backend / database</td><td>None. All voting data lives on the blockchain.</td></tr></tbody></table>
+<table class=""><thead><tr><th>Type</th><th>Item</th><th>Specification</th></tr></thead><tbody><tr><td>Hardware</td><td>Processor / RAM</td><td>Intel Core i3 / Ryzen 3 or better; 4 GB RAM minimum, 8 GB recommended</td></tr><tr><td>Software</td><td>OS</td><td>Windows 10/11, Ubuntu 22.04+ or macOS</td></tr><tr><td>Software</td><td>Runtime</td><td>Node.js 18+ (tested on 22) and npm</td></tr><tr><td>Software</td><td>Browser</td><td>Chrome / Brave / Firefox with the MetaMask extension</td></tr></tbody></table>
+</section>
+
+<section class="chapter">
+<h2>8. Testing</h2>
+<h3>8.1 Smart Contract Test Cases</h3>
+<p>The contract was tested with Hardhat using fixtures and time manipulation (<code>npx hardhat test</code>). <b>Result: 24 passing, 0 failing.</b></p>
+<table class=""><thead><tr><th>ID</th><th>Feature</th><th>Expected behaviour</th><th>Result</th></tr></thead><tbody><tr><td>TC01</td><td>Deployment</td><td>Deployer is owner, no election yet</td><td>Pass</td></tr><tr><td>TC02</td><td>Create election</td><td>ElectionCreated emitted, id = 1</td><td>Pass</td></tr><tr><td>TC03</td><td>Create election</td><td>Empty title / second running election rejected</td><td>Pass</td></tr><tr><td>TC04</td><td>Add candidate</td><td>Sequential ids, CandidateAdded emitted</td><td>Pass</td></tr><tr><td>TC05</td><td>Add candidate</td><td>Needs election; empty name/party rejected</td><td>Pass</td></tr><tr><td>TC06</td><td>Add candidate</td><td>Rejected after election started</td><td>Pass</td></tr><tr><td>TC07</td><td>Register voter</td><td>VoterRegistered emitted, status = registered</td><td>Pass</td></tr><tr><td>TC08</td><td>Register voters (batch)</td><td>5 addresses registered in one tx</td><td>Pass</td></tr><tr><td>TC09</td><td>Register voter</td><td>Duplicate & zero address rejected</td><td>Pass</td></tr><tr><td>TC10</td><td>Start election</td><td>ElectionStarted, votingOpen = true, deadline set</td><td>Pass</td></tr><tr><td>TC11</td><td>Start election</td><td>Without candidates / twice rejected</td><td>Pass</td></tr><tr><td>TC12</td><td>Successful vote</td><td>Count +1, totalVotes +1, hasVoted = true</td><td>Pass</td></tr><tr><td>TC13</td><td>Duplicate vote</td><td>Second vote (same or other candidate) → AlreadyVoted</td><td>Pass</td></tr><tr><td>TC14</td><td>Unregistered voter</td><td>NotRegistered</td><td>Pass</td></tr><tr><td>TC15</td><td>Vote before start</td><td>ElectionNotStarted</td><td>Pass</td></tr><tr><td>TC16</td><td>Vote after end</td><td>ElectionNotActive</td><td>Pass</td></tr><tr><td>TC17</td><td>Vote after deadline</td><td>Time travel +61 s → ElectionNotActive</td><td>Pass</td></tr><tr><td>TC18</td><td>Invalid candidate</td><td>id 0 and id 4 → InvalidCandidate</td><td>Pass</td></tr><tr><td>TC19</td><td>No election</td><td>vote() → NoElection</td><td>Pass</td></tr><tr><td>TC20</td><td>End election</td><td>ElectionEnded, results frozen, winner = #2</td><td>Pass</td></tr><tr><td>TC21</td><td>Tie</td><td>getWinners() returns [1, 3]</td><td>Pass</td></tr><tr><td>TC22</td><td>End election</td><td>Before start / twice rejected</td><td>Pass</td></tr><tr><td>TC23</td><td>New election</td><td>History of election #1 preserved</td><td>Pass</td></tr><tr><td>TC24</td><td>Admin authorization</td><td>All admin functions revert for non-owner</td><td>Pass</td></tr></tbody></table>
+<h3>8.2 End-to-end Test and Gas Usage</h3>
+<p>An end-to-end run was performed on the local Hardhat network through the real user interface: the admin started the election,
+five registered voters voted (3 for Priya Patil, 1 for Aarav Sharma, 1 for Rahul Deshmukh), an unregistered wallet was blocked,
+the admin ended the election and the results page declared the winner. The gas used by each transaction was read from the receipts:</p>
+<table class=""><thead><tr><th>Transaction</th><th>Gas used</th></tr></thead><tbody><tr><td>Deploy Voting.sol</td><td>1,831,518</td></tr><tr><td>createElection</td><td>71,620</td></tr><tr><td>addCandidate (first)</td><td>216,580</td></tr><tr><td>addCandidate</td><td>≈199,450</td></tr><tr><td>registerVoters (5 addresses)</td><td>176,501</td></tr><tr><td>startElection</td><td>76,787</td></tr><tr><td>vote (first vote of election)</td><td>82,623</td></tr><tr><td>vote (candidate already has votes)</td><td>48,423</td></tr><tr><td>endElection</td><td>57,210</td></tr></tbody></table>
+</section>
+
+<section class="chapter">
+<h2>9. Results and Output</h2>
+<p>Observed results of the local deployment:</p>
+<ul>
+<li>Network: Hardhat Local, chain id 31337. Contract address: <code>0x5FbDB2315678afecb367f032d93F642f64180aa3</code> (deployed in block #1).</li>
+<li>Election “Student Council Election 2026” with candidates Aarav Sharma (Student First), Priya Patil (Future Forward) and Rahul Deshmukh (Progress Alliance).</li>
+<li>5 registered voters, 5 votes cast, 100% turnout. Final result: Priya Patil 3 votes (60%), Aarav Sharma 1 (20%), Rahul Deshmukh 1 (20%). Winner: Priya Patil.</li>
+<li>Duplicate vote, unregistered wallet and non-owner admin access were all rejected.</li>
+</ul>
+<figure class="shot "><img src="../screenshots/01-home.jpg"/><figcaption>Figure 8: Landing page with live election status card</figcaption></figure>
+<figure class="shot small"><img src="../screenshots/04-wallet.jpg"/><figcaption>Figure 9: Connect Wallet page: address, network, eligibility and role</figcaption></figure>
+</section>
+<section class="chapter">
+<figure class="shot tall"><img src="../screenshots/02-admin-setup.jpg"/><figcaption>Figure 10: Admin dashboard before the election starts (candidates and voters registered on-chain)</figcaption></figure>
+</section>
+<section class="chapter">
+<figure class="shot small"><img src="../screenshots/03-admin-start-tx.jpg"/><figcaption>Figure 11: Admin starts the election: confirmed transaction with hash, block, status, timestamp, sender and contract</figcaption></figure>
+<figure class="shot "><img src="../screenshots/05-vote-dashboard.jpg"/><figcaption>Figure 12: Voter dashboard with candidate cards (photo/avatar, name, party, manifesto, id, vote button)</figcaption></figure>
+</section>
+<section class="chapter">
+<figure class="shot small"><img src="../screenshots/06-confirm-modal.jpg"/><figcaption>Figure 13: Vote confirmation modal</figcaption></figure>
+<figure class="shot small"><img src="../screenshots/07-tx-awaiting.jpg"/><figcaption>Figure 14: Waiting for confirmation in MetaMask</figcaption></figure>
+</section>
+<section class="chapter">
+<figure class="shot small"><img src="../screenshots/08-tx-success.jpg"/><figcaption>Figure 15: “Vote successfully recorded on blockchain ✓” with transaction hash and explorer link</figcaption></figure>
+<figure class="shot small"><img src="../screenshots/09-already-voted.jpg"/><figcaption>Figure 16: After voting: “You have already voted ✓”</figcaption></figure>
+</section>
+<section class="chapter">
+<figure class="shot tall"><img src="../screenshots/10-results-live.jpg"/><figcaption>Figure 17: Live results while voting is open (bar chart, donut chart, ranking)</figcaption></figure>
+</section>
+<section class="chapter">
+<figure class="shot small"><img src="../screenshots/11-not-registered.jpg"/><figcaption>Figure 18: Unregistered wallet: voting disabled with “Not registered”</figcaption></figure>
+<figure class="shot small"><img src="../screenshots/12-admin-unauthorized.jpg"/><figcaption>Figure 19: Non-owner wallet blocked from the admin dashboard</figcaption></figure>
+</section>
+<section class="chapter">
+<figure class="shot tall"><img src="../screenshots/13-explorer.jpg"/><figcaption>Figure 20: Built-in blockchain explorer listing every contract event</figcaption></figure>
+</section>
+<section class="chapter">
+<figure class="shot "><img src="../screenshots/14-explorer-tx.jpg"/><figcaption>Figure 21: Transaction details: method, gas used and decoded events</figcaption></figure>
+<figure class="shot small"><img src="../screenshots/15-admin-ended.jpg"/><figcaption>Figure 22: Admin dashboard after ending the election, with transaction history</figcaption></figure>
+</section>
+<section class="chapter">
+<figure class="shot tall"><img src="../screenshots/16-results-final.jpg"/><figcaption>Figure 23: Final results with the winner declared after the election ended</figcaption></figure>
+</section>
+<section class="chapter">
+<div class="grid2">
+<figure class="shot "><img src="../screenshots/18-mobile-results.jpg"/><figcaption>Figure 24: Responsive mobile layout</figcaption></figure>
+<figure class="shot "><img src="../screenshots/17-how-it-works.jpg"/><figcaption>Figure 25: How It Works page: architecture and privacy explanation</figcaption></figure>
+</div>
+
+<h2 style="margin-top:18px">10. Security Considerations, Transparency and Privacy</h2>
+<h3>10.1 Security Measures</h3>
+<ul>
+<li><b>Access control:</b> OpenZeppelin <code>Ownable</code>; every admin function is <code>onlyOwner</code>.</li>
+<li><b>Phase control:</b> <code>beforeStart</code> and <code>onlyWhileOpen</code> modifiers, plus an optional time-based deadline using <code>block.timestamp</code>.</li>
+<li><b>Input validation:</b> empty fields, zero address, duplicate registration and out-of-range candidate ids revert.</li>
+<li><b>One vote per wallet:</b> <code>hasVoted</code> is set before the count is updated; a second call reverts with <code>AlreadyVoted</code>.</li>
+<li><b>No ether handling and no external calls</b> in <code>vote()</code>, removing re-entrancy and fund-loss risks.</li>
+<li><b>Gas efficiency:</b> custom errors, <code>calldata</code> parameters, batch voter registration, optimizer enabled (200 runs).</li>
+<li><b>Frontend:</b> no private keys handled; configuration via environment variables; the wrong network is detected before signing.</li>
+</ul>
+<h3>10.2 Transparency versus Voter Privacy</h3>
+<div class="note">
+<p><b>Transparency</b> means the process can be audited: anyone can see the candidates, the number of registered voters, the vote counts and that no address voted twice. VoteChain provides this.</p>
+<p><b>Privacy (ballot secrecy)</b> means nobody can link a voter to their choice. VoteChain does <b>not</b> provide this. The <code>vote(candidateId)</code> transaction and the <code>VoteCast</code> event reveal which wallet voted for which candidate. Wallets are pseudonymous, but anyone who knows who owns an address can see their vote. Blockchain voting is therefore <b>not</b> completely anonymous.</p>
+<p>This is an academic demonstration. It is <b>not suitable for real government elections</b> without verified identity, privacy-preserving cryptography, coercion resistance, independent audits and a legal framework.</p>
+</div>
+</section>
+
+<section class="chapter">
+<h2>11. Limitations and Future Enhancements</h2>
+<h3>11.1 Limitations</h3>
+<ul>
+<li>Votes are linkable to wallet addresses (no ballot secrecy) and a voter could prove their vote to a third party (no coercion resistance).</li>
+<li>One wallet represents one voter; the admin must verify off-chain that each address belongs to a distinct eligible person.</li>
+<li>A single owner key controls the election life-cycle; losing or leaking it is a risk.</li>
+<li>Every vote costs gas; on a public mainnet this would be a cost barrier for voters.</li>
+<li>Candidate text is stored on-chain, which is expensive for long manifestos or images.</li>
+<li>The frontend polls the node; very large elections would need an indexer (e.g. The Graph).</li>
+</ul>
+<h3>11.2 Future Enhancements</h3>
+<ul>
+<li>Privacy-preserving voting with zero-knowledge proofs (Semaphore, MACI) or a commit-reveal scheme.</li>
+<li>Identity integration (college ID / DigiLocker based verification, soulbound voter tokens).</li>
+<li>Multi-signature or DAO-based administration (Gnosis Safe, AccessControl roles).</li>
+<li>Gasless voting with meta-transactions (EIP-2771) or account abstraction (ERC-4337) so voters need no ETH.</li>
+<li>IPFS storage for candidate photos and manifestos; multiple concurrent elections; ranked-choice voting.</li>
+<li>Deployment to a Layer-2 network (Polygon, Arbitrum, Optimism) for lower fees, with contract verification on the block explorer.</li>
+</ul>
+
+<h2 style="margin-top:22px">12. Installation, Deployment and Demo Guide</h2>
+<pre># 1. Blockchain: install, test, run node, deploy and seed demo data
+cd votechain/blockchain
+npm install
+npx hardhat test                      # 24 passing
+npx hardhat node                      # terminal 1: local chain on http://127.0.0.1:8545
+npm run deploy:local                  # terminal 2: writes frontend/.env.local + ABI
+npm run seed:local                    # demo election, 3 candidates, 5 voters
+
+# 2. Frontend
+cd ../frontend
+npm install
+npm run dev                           # http://localhost:5173</pre>
+<p><b>MetaMask setup:</b> add a network with RPC <code>http://127.0.0.1:8545</code>, chain id <code>31337</code>, symbol ETH. Import Hardhat account #0
+(the admin/owner) and accounts #1–#5 (registered voters) using the private keys printed by <code>npx hardhat node</code>. These are public test
+keys and must never be used on a real network. Account #6 or later can be used to demonstrate an unregistered voter.</p>
+<p><b>Demo flow:</b> Admin opens the Admin page and clicks Start → voters #1–#5 connect and vote → Results update live → Admin ends the election
+→ the winner is shown. For Sepolia, set <code>SEPOLIA_RPC_URL</code> and <code>PRIVATE_KEY</code> in <code>blockchain/.env</code> and run <code>npm run deploy:sepolia</code>;
+explorer links then open Sepolia Etherscan.</p>
+</section>
+
+<section class="chapter">
+<h2>13. Conclusion</h2>
+<p>VoteChain demonstrates how a smart contract can act as a trustworthy, shared election authority. The <code>Voting</code> contract stores voters,
+candidates, status and vote counts on-chain, enforces one vote per registered wallet, restricts administration to the owner and publishes
+an event for every action. The React dApp provides a complete user experience, from MetaMask connection and eligibility checks to vote
+confirmation, transaction tracking, live charts and a built-in explorer, while reading every number directly from the blockchain.</p>
+<p>The contract was verified with 24 automated test cases and an end-to-end election on a local Hardhat network. The project also makes
+its limits explicit: blockchain voting provides integrity and transparency but not, by itself, privacy or real-world identity. With
+zero-knowledge privacy, identity integration and multi-signature administration, the same architecture could serve as the basis for
+trustworthy institutional elections.</p>
+<p><b>Project outcome:</b> a working decentralized e-voting application with on-chain voter registration, candidate management, one-vote enforcement,
+publicly verifiable results and complete transaction traceability.</p>
+
+<h2 style="margin-top:22px">14. References</h2>
+<ol>
+<li>S. Nakamoto, “Bitcoin: A Peer-to-Peer Electronic Cash System,” 2008.</li>
+<li>G. Wood, “Ethereum: A Secure Decentralised Generalised Transaction Ledger (Yellow Paper).”</li>
+<li>Solidity Documentation, v0.8.24 – https://docs.soliditylang.org</li>
+<li>OpenZeppelin Contracts 5.x Documentation – Access Control / Ownable – https://docs.openzeppelin.com/contracts</li>
+<li>Hardhat Documentation – https://hardhat.org/docs</li>
+<li>ethers.js v6 Documentation – https://docs.ethers.org/v6</li>
+<li>EIP-1193: Ethereum Provider JavaScript API – https://eips.ethereum.org/EIPS/eip-1193</li>
+<li>MetaMask Developer Documentation – https://docs.metamask.io</li>
+<li>React, Vite, Tailwind CSS and Recharts official documentation.</li>
+<li>F. Þ. Hjálmarsson et al., “Blockchain-Based E-Voting System,” IEEE CLOUD, 2018.</li>
+<li>Privacy &amp; Scaling Explorations, “MACI: Minimal Anti-Collusion Infrastructure.”</li>
+</ol>
+
+<h2 style="margin-top:22px">Appendix A: Mini Project Presentation Points</h2>
+<ol>
+<li><b>Title:</b> VoteChain – Decentralized E-Voting System · Yashvant Dayanand Mane (F24121004, Roll 68) · Guide: Dr. S. R. Khonde.</li>
+<li><b>Problem:</b> centralized e-voting requires trusting whoever controls the database.</li>
+<li><b>Idea:</b> move the election rules and the ballot box into an Ethereum smart contract.</li>
+<li><b>Architecture:</b> React → MetaMask → ethers.js → Ethereum → Voting.sol (Figure 1).</li>
+<li><b>Contract:</b> Candidate / Voter / Election structs, onlyOwner, phase modifiers, 6 events, custom errors.</li>
+<li><b>Rules enforced on-chain:</b> registered only, one vote, valid candidate, only while open.</li>
+<li><b>Live demo:</b> admin starts election → voter connects, confirms vote in MetaMask → tx hash and block → results update → duplicate vote rejected → admin ends → winner.</li>
+<li><b>Explorer:</b> every action has a transaction hash, block, timestamp and sender.</li>
+<li><b>Testing:</b> 24 Hardhat tests passing; gas per vote about 48k–83k.</li>
+<li><b>Honest limits:</b> transparency is not privacy; academic system, not for government elections.</li>
+<li><b>Future:</b> ZK privacy, identity, multisig admin, gasless voting, Layer-2.</li>
+</ol>
+</section>
+</body></html>
