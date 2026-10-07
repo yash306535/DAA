@@ -236,6 +236,19 @@ figcaption {{ font-family: Inter, Arial; font-size: 9pt; color: #4b5563; margin-
 .note {{ border-left: 4px solid #d97706; background: #fffbeb; padding: 9px 12px; margin: 10px 0 14px; font-size: 10.5pt; break-inside: avoid; }}
 .note p:last-child {{ margin: 0; }}
 .kw {{ font-family: Inter; font-size: 10pt; }}
+.frame {{ border: 1.5px solid #111; height: 253mm; padding: 8mm 12mm 0; text-align: center; font-family: "Times New Roman", "Tinos", "Source Serif 4", serif; color: #111; }}
+.mpr2 {{ font-size: 13pt; font-weight: 700; }}
+.ttl2 {{ font-size: 20pt; font-weight: 700; line-height: 1.25; margin: 4mm 4mm 4mm; }}
+.topic {{ font-size: 12pt; font-style: italic; color: #333; margin-top: 2px; }}
+.sb {{ font-size: 13.5pt; font-weight: 700; margin-top: 7mm; }}
+.cover table.ct {{ width: 75%; margin: 4mm auto 0; font-family: "Times New Roman", "Tinos", serif; font-size: 12.5pt; }}
+.cover table.ct th, .cover table.ct td {{ border: 1px solid #333; padding: 4px 10px; background: #fff !important; color: #111; }}
+.cover table.ct th {{ text-align: left; width: 42%; font-weight: 700; }}
+.cover table.ct td {{ text-align: center; }}
+.gd {{ font-size: 13pt; margin-top: 3px; }}
+.logo {{ width: 28mm; margin: 5mm auto 4mm; display: block; }}
+.dp {{ font-size: 12pt; font-style: italic; line-height: 1.5; }}
+.ad {{ font-size: 10.5pt; font-weight: 700; margin-top: 3mm; }}
 /* Cover */
 .cover {{ text-align: center; font-family: "Source Serif 4", serif; padding-top: 4mm; }}
 .cover .uni {{ font-size: 17pt; font-weight: 700; }}
@@ -269,26 +282,28 @@ figcaption {{ font-family: Inter, Arial; font-size: 9pt; color: #4b5563; margin-
 </style></head><body>
 
 <!-- COVER -->
-<section class="cover page">
-  <div class="uni">Savitribai Phule Pune University</div>
-  <div class="col">Modern Education Society’s Wadia College of Engineering, Pune</div>
-  <div class="addr">19, Bund Garden, V.K. Joag Path, Pune – 411001.</div>
-  <div class="acc">ACCREDITED BY NBA AND NAAC WITH ‘A++’ GRADE</div>
-  <div class="dept">DEPARTMENT OF COMPUTER ENGINEERING</div>
-  <div class="a">A</div>
-  <div class="mpr">MINI PROJECT REPORT</div>
-  <div class="a" style="margin-top:4px">ON</div>
-  <div class="ttl">“{TITLE}”</div>
-  <div class="sub">VoteChain – Decentralized E-Voting System</div>
-  <div class="deg">B.E. (COMPUTER)</div>
-  <div class="lbl">SUBMITTED BY</div>
-  <table><thead><tr><th>Name of Student</th><th>PRN</th><th>Roll No.</th></tr></thead>
-  <tbody><tr><td>Yashvant Dayanand Mane</td><td>F24121004</td><td>68</td></tr></tbody></table>
-  <div class="lbl" style="margin-top:22px">GUIDED BY</div>
-  <div class="guide">Dr. S. R. Khonde</div>
-  <div class="yr">(Academic Year: 2026–2027)</div>
-  <div class="foot">DEPARTMENT OF COMPUTER ENGINEERING<br>MODERN EDUCATION SOCIETY’S WADIA COLLEGE OF ENGINEERING, PUNE</div>
-</section>
+<section class="cover page"><div class="frame">
+  <div class="mpr2">A MINI PROJECT REPORT ON</div>
+  <div class="ttl2">{TITLE}</div>
+  <div class="topic">Topic: VoteChain – Decentralized e-voting using Ethereum smart contracts, MetaMask and React</div>
+  <div class="topic">FOURTH YEAR OF COMPUTER ENGINEERING</div>
+  <div class="sb">SUBMITTED BY</div>
+  <table class="ct"><tbody>
+    <tr><th>Student Name:</th><td>Yashvant Dayanand Mane</td></tr>
+    <tr><th>PRN No.:</th><td>F24121004</td></tr>
+    <tr><th>Class:</th><td>B.E. Computer Engineering</td></tr>
+    <tr><th>Division:</th><td>&nbsp;</td></tr>
+    <tr><th>Roll No.:</th><td>68</td></tr>
+    <tr><th>Semester:</th><td>VII</td></tr>
+    <tr><th>Academic Year:</th><td>2026–2027</td></tr>
+  </tbody></table>
+  <div class="sb" style="margin-top:7mm">UNDER THE GUIDANCE OF</div>
+  <div class="gd">Dr. S. R. Khonde</div>
+  <img class="logo" src="college_logo.png"/>
+  <div class="dp">DEPARTMENT OF COMPUTER ENGINEERING<br>MODERN EDUCATION SOCIETY’S WADIA COLLEGE OF ENGINEERING</div>
+  <div class="ad">19, LATE PRIN V.K. JOAG PATH, WADIA COLLEGE CAMPUS, PUNE 411001</div>
+  <div class="ad">Savitribai Phule Pune University</div>
+</div></section>
 
 <!-- CERTIFICATE -->
 <section class="cert page">
